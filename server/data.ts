@@ -18,7 +18,8 @@ let clubValues = clubSheet.getDataRange().getValues();
 const clubApplicationSheet = clubDB.getSheetByName("club_application");
 let clubApplicationValues = clubApplicationSheet.getDataRange().getDisplayValues();
 const clubEnrollmentSheet = clubDB.getSheetByName("club_enrollment");
-let clubEnrollmentValues = clubEnrollmentSheet.getDataRange().getDisplayValues()
+let clubEnrollmentValues = clubEnrollmentSheet.getDataRange().getDisplayValues();
+let clubEnrollmentObjects = sheetToObjArr(clubEnrollmentValues);
 const moderatorSheet = clubDB.getSheetByName("moderators");
 let moderatorValues = moderatorSheet.getDataRange().getValues();
 const adminSheet = clubDB.getSheetByName("admins");
@@ -33,11 +34,23 @@ function getFormStatus(){
   return formStatus;
 }
 function getClubApplicationData() {
-  let clubApplicationRecords = clubApplicationValues.slice();
-  // Need to remove Date object, or return will be null :-(
-  let clubApplicationData = clubApplicationRecords.map(function (table) {
-    table.splice(1, 1);
-    return table.slice();
+  return clubApplicationValues.slice();
+}
+function sheetToObjArr(data: any[]) {
+  // get key values from first row or original array
+  var header = data.shift();
+  var arrayOfObjects = data.map(function (values) {
+    return header.reduce(function (
+      o: { [x: string]: any; },
+      k: string | number,
+      i: string | number
+    ) {
+      o[k] = values[i];
+      return o;
+    },
+    {});
   });
-  return clubApplicationData;
+  // put back key values from first row or original array
+  data.unshift(header);
+  return arrayOfObjects;
 }
