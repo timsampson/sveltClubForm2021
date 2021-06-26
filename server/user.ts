@@ -8,18 +8,18 @@ function fetchClubList() {
 }
 function getUserState() {
   let user = {
-    formStatus: undefined,
-    email: undefined,
-    name: undefined,
-    school: undefined,
-    grade: undefined,
+    formStatus: '',
+    email: '',
+    name: '',
+    school: '',
+    grade: 0,
     homeroom: "5-1",
     userRole: undefined,
     isStudent: undefined,
     isInClub: undefined,
-    hasPendingClub: undefined,
-    currentClubName: undefined,
-    currentClubId: undefined,
+    hasPendingClub: false,
+    currentClubName: '',
+    currentClubId: 0,
     isModerator: undefined,
   };
   user.name = "fred";
@@ -39,10 +39,10 @@ function getClubsByLevel() {
   return clubsByLevel;
 }
 function getAppliedClubForUser() {
-  let filteredClubEnrollmentObjValues = clubEnrollmentObjects.filter(function (enrollment) {
+  let filteredClubEnrollmentRecords = clubEnrollmentRecords.filter(function (enrollment) {
     return (enrollment.email) == getUserEmail();
   });
-  return filteredClubEnrollmentObjValues;
+  return filteredClubEnrollmentRecords;
 }
 function currentUser(value: { name: string }) {
   return value.name == getUserEmail();

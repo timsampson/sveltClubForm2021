@@ -1,18 +1,11 @@
 <script>
   import { onMount } from "svelte";
-  import { userDetails } from "../userStores.js";
-
   onMount(() => {
     google.script.run.withSuccessHandler(showClubsByLevel).getClubsByLevel();
-    google.script.run.withSuccessHandler(updateUserDetails).getUserState();
   });
   let titles = [];
   let rows = [];
   let clubTablesLoaded = false;
-  function updateUserDetails(updatedUserDetails) {
-    $userDetails = updatedUserDetails;
-    console.table($userDetails);
-  }
   function showClubsByLevel(allClubValues) {
     titles = allClubValues.splice(0, 1)[0];
     rows = allClubValues;
@@ -20,17 +13,6 @@
   }
 </script>
 
-<div>
-  {#if $userDetails.isInClub}
-    <h1 class="text-2xl my-2 text-center text-gray-800 ">
-      Available clubs for {$userDetails.name} in {$userDetails.homeroom}.
-    </h1>
-  {:else}
-    <h1 class="text-2xl my-2 text-center text-gray-800 ">
-      Please wait a moment for the available clubs.
-    </h1>
-  {/if}
-</div>
 {#if clubTablesLoaded}
   <div>
     <table

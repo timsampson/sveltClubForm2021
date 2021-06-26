@@ -4,10 +4,11 @@ const schoolDB = SpreadsheetApp.openById(
 );
 const staffSheet = schoolDB.getSheetByName("staff");
 let staffValues = staffSheet.getDataRange().getValues();
+let staffRecords = sheetToObjArr(staffValues);
+
 const studentSheet = schoolDB.getSheetByName("students");
 let studentValues = studentSheet.getDataRange().getValues();
-const placement2020Sheet = schoolDB.getSheetByName("placement2020");
-let placement2020Values = placement2020Sheet.getDataRange().getValues();
+let studentRecords = sheetToObjArr(studentValues);
 
 // club sheet data
 const clubDB = SpreadsheetApp.openById(
@@ -15,15 +16,22 @@ const clubDB = SpreadsheetApp.openById(
 );
 const clubSheet = clubDB.getSheetByName("clubs");
 let clubValues = clubSheet.getDataRange().getValues();
+let clubRecords = sheetToObjArr(clubValues);
+
 const clubApplicationSheet = clubDB.getSheetByName("club_application");
 let clubApplicationValues = clubApplicationSheet.getDataRange().getDisplayValues();
+
 const clubEnrollmentSheet = clubDB.getSheetByName("club_enrollment");
 let clubEnrollmentValues = clubEnrollmentSheet.getDataRange().getDisplayValues();
-let clubEnrollmentObjects = sheetToObjArr(clubEnrollmentValues);
+let clubEnrollmentRecords = sheetToObjArr(clubEnrollmentValues);
+
 const moderatorSheet = clubDB.getSheetByName("moderators");
 let moderatorValues = moderatorSheet.getDataRange().getValues();
+let moderatorRecords = sheetToObjArr(moderatorValues);
+
 const adminSheet = clubDB.getSheetByName("admins");
 let adminValues = adminSheet.getDataRange().getValues();
+let adminRecords = sheetToObjArr(adminValues);
 
 // club sheet value for sheet status
 const formStatusSheet = clubDB.getSheetByName("formstatus");
