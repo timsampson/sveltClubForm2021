@@ -1,10 +1,20 @@
 <script>
-  google.script.run.withSuccessHandler(showClubValues).getClubApplicationData();
-  export let titles = [];
-  export let rows = [];
-  function showClubValues(allClubValues) {
-    titles = allClubValues.splice(0, 1)[0];
-    rows = allClubValues;
+  google.script.run.withSuccessHandler(showUserClubRecord).getClubRecords();
+  google.script.run
+    .withSuccessHandler(showClubValues)
+    .getClubApplicationRecords();
+  export let titles = [
+    "Club Name",
+    "Enrolled",
+    "Capacity",
+    "Level",
+    "Details",
+    "Moderator",
+  ];
+  export let records = [];
+  function showUserClubRecord(allClubValues) {
+    records = allClubValues;
+    console.table(allClubValues);
   }
 </script>
 
@@ -20,35 +30,25 @@
     <thead>
       <tr>
         {#each titles as title, i (titles[i])}
-          {#if i != 0}
-            {#if i != 6}
-              {#if i != 8}
-                {#if i != 10}
-                  <th class="capitalize bg-blue-600 text-white px-2 border"
-                    >{title}</th
-                  >
-                {/if}
-              {/if}
-            {/if}
-          {/if}
+          <th class="capitalize bg-blue-600 text-white px-2 border">{title}</th>
         {/each}
       </tr>
     </thead>
     <tbody>
-      {#each rows as row}
+      {#each records as record}
         <tr class="odd:bg-gray-200">
-          {#each row as cell, c (row[c])}
-            {#if c != 0}
-              {#if c != 6}
-                {#if c != 8}
-                  {#if c != 10}
-                    <td class="min-w-26  px-2 border border-blue-800">{cell}</td
-                    >
-                  {/if}
-                {/if}
-              {/if}
-            {/if}
-          {/each}
+          <td class="min-w-26 px-2 border border-blue-800">{record.name}</td>
+          <td class="min-w-26 px-2 border border-blue-800">{record.enrolled}</td
+          >
+          <td class="min-w-26 px-2 border border-blue-800">{record.capacity}</td
+          >
+          <td class="min-w-26 px-2 border border-blue-800">{record.level}</td>
+          <td class="min-w-26 px-2 border border-blue-800"
+            >{record.description}</td
+          >
+          <td class="min-w-26 px-2 border border-blue-800"
+            >{record.moderator}</td
+          >
         </tr>
       {/each}
     </tbody>

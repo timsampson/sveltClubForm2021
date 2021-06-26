@@ -2,6 +2,12 @@
 const schoolDB = SpreadsheetApp.openById(
   "1xNniCTmFaHzf5yYI5y4sGbpqYO_8VDMaZg3RA52jTK8"
 );
+
+// club sheet data
+const clubDB = SpreadsheetApp.openById(
+  "1yDrguQ8TXGE4OEoam_xPKv4VVir96P7p6cBfVJ2i7j8"
+);
+
 const staffSheet = schoolDB.getSheetByName("staff");
 let staffValues = staffSheet.getDataRange().getValues();
 let staffRecords = sheetToObjArr(staffValues);
@@ -10,13 +16,14 @@ const studentSheet = schoolDB.getSheetByName("students");
 let studentValues = studentSheet.getDataRange().getValues();
 let studentRecords = sheetToObjArr(studentValues);
 
-// club sheet data
-const clubDB = SpreadsheetApp.openById(
-  "1yDrguQ8TXGE4OEoam_xPKv4VVir96P7p6cBfVJ2i7j8"
-);
+
 const clubSheet = clubDB.getSheetByName("clubs");
 let clubValues = clubSheet.getDataRange().getValues();
-let clubRecords = sheetToObjArr(clubValues);
+function getClublist(){
+   clubValues = clubSheet.getDataRange().getValues();
+   let clubRecords = sheetToObjArr(clubValues);
+   return clubRecords;
+}
 
 const clubApplicationSheet = clubDB.getSheetByName("club_application");
 let clubApplicationValues = clubApplicationSheet.getDataRange().getDisplayValues();
@@ -43,6 +50,11 @@ function getFormStatus(){
 }
 function getClubApplicationData() {
   return clubApplicationValues.slice();
+}
+function getClubApplicationRecords(){
+   clubApplicationValues = clubSheet.getDataRange().getValues();
+   let clubRecords = sheetToObjArr(clubApplicationValues);
+   return clubRecords;
 }
 function sheetToObjArr(data: any[]) {
   // get key values from first row or original array

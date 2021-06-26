@@ -1,51 +1,49 @@
 <script>
-  import { onMount } from "svelte";
-  onMount(() => {
-    google.script.run.withSuccessHandler(showClubsByLevel).getClubsByLevel();
-  });
-  let titles = [];
-  let rows = [];
-  let clubTablesLoaded = false;
-  function showClubsByLevel(allClubValues) {
-    titles = allClubValues.splice(0, 1)[0];
-    rows = allClubValues;
-    clubTablesLoaded = true;
+  google.script.run.withSuccessHandler(showAvailableClubs).getClublist();
+  export let titles = [
+    "Club Name",
+    "Enrolled",
+    "Capacity",
+    "Level",
+    "Details",
+    "Moderator",
+  ];
+  let clubs = {};
+  function showAvailableClubs(clubList) {
+    clubs = clubList;
+    console.table(clubList);
   }
 </script>
 
-{#if clubTablesLoaded}
-  <div>
-    <table
-      class="table table-auto mx-auto my-2 text-sm border-4 border-indigo-800"
+<div class="mt-2 mx-auto p-4">
+  <div class="sm:text-center lg:text-left">
+    <h1
+      class="text-4xl tracking-tight font-extrabold text-gray-900 sm:text-5xl md:text-6xl"
     >
-      <thead>
-        <tr>
-          {#each titles as title, i (titles[i])}
-            {#if i != 0}
-              {#if i != 7}
-                <th
-                  class="capitalize text-center text-lg bg-indigo-500 text-white px-2 border-b-2 border-indigo-800"
-                  >{title}</th
-                >
-              {/if}
-            {/if}
-          {/each}
-        </tr>
-      </thead>
-      <tbody>
-        {#each rows as row}
-          <tr class="odd:bg-gray-200">
-            {#each row as cell, c (row[c])}
-              {#if c != 0}
-                {#if c != 7}
-                  <td class="min-w-26  px-2 border border-indigo-800">{cell}</td
-                  >
-                {/if}
-              {/if}
-            {/each}
-          </tr>
-        {/each}
-      </tbody>
-    </table>
+      <span>Club Record</span>
+    </h1>
   </div>
-{/if}
+  <table class="table table-auto mx-auto text-sm border-blue-800 border-4">
+    <thead>
+      <tr>
+        {#each titles as title, i (titles[i])}
+          <th class="capitalize bg-blue-600 text-white px-2 border">{title}</th>
+        {/each}
+      </tr>
+    </thead>
+    <tbody>
+      {#each clubs as club}
+        <tr class="odd:bg-gray-200">
+          <td class="min-w-26 px-2 border border-blue-800">{club.name}</td>
+          <td class="min-w-26 px-2 border border-blue-800">{club.enrolled}</td>
+          <td class="min-w-26 px-2 border border-blue-800">{club.capacity}</td>
+          <td class="min-w-26 px-2 border border-blue-800">{club.level}</td>
+          <td class="min-w-26 px-2 border border-blue-800"
+            >{club.description}</td
+          >
+          <td class="min-w-26 px-2 border border-blue-800">{club.moderator}</td>
+        </tr>
+      {/each}
+    </tbody>
+  </table>
+</div>
