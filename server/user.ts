@@ -24,6 +24,7 @@ function getUserState() {
   };
   user.name = "fred";
   user.isInClub = true;
+  user.currentClubName = 'Chess';
   return user;
 }
 function getUserEmail() {

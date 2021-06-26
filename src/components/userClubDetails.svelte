@@ -11,13 +11,18 @@
 </script>
 
 <div>
-  {#if $userDetails.isInClub}
+  {#if $userDetails.isInClub === undefined}
     <h1 class="text-2xl my-2 text-center text-gray-800 ">
-      Available clubs for {$userDetails.name} in {$userDetails.homeroom}.
+      Please wait for the club details to load.
+    </h1>
+  {:else if $userDetails.isInClub}
+    <h1 class="text-2xl my-2 text-center text-gray-800 ">
+      Welcome {$userDetails.name} in {$userDetails.homeroom}, you are currently
+      in the {$userDetails.currentClubName} club.
     </h1>
   {:else}
     <h1 class="text-2xl my-2 text-center text-gray-800 ">
-      Please wait a moment for the available clubs.
+      Welcome {$userDetails.name} in {$userDetails.homeroom}.
     </h1>
   {/if}
 </div>
