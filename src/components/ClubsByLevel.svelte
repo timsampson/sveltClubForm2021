@@ -1,10 +1,11 @@
 <script>
+  import postcss from "postcss";
+
   google.script.run.withSuccessHandler(showAvailableClubs).getClublist();
   export let titles = [
     "Club Name",
     "Enrolled",
     "Capacity",
-    "Level",
     "Details",
     "Moderator",
   ];
@@ -31,11 +32,13 @@
     </thead>
     <tbody>
       {#each clubs as club}
-        <tr class="odd:bg-gray-200">
+        <tr
+          class="odd:bg-gray-200"
+          class:club-full={club.enrolled >= club.capacity}
+        >
           <td class="min-w-26 px-2 border border-blue-800">{club.name}</td>
           <td class="min-w-26 px-2 border border-blue-800">{club.enrolled}</td>
           <td class="min-w-26 px-2 border border-blue-800">{club.capacity}</td>
-          <td class="min-w-26 px-2 border border-blue-800">{club.level}</td>
           <td class="min-w-26 px-2 border border-blue-800"
             >{club.description}</td
           >
@@ -45,3 +48,11 @@
     </tbody>
   </table>
 </div>
+
+<style lang="postcss">
+  @layer components {
+    .club-full {
+      @apply italic text-red-500 font-bold;
+    }
+  }
+</style>
