@@ -23,7 +23,7 @@
   onMount(() => {
     $notice = `Please wait while your choices load`;
     $alertInfo = true;
-    google.script.run.withSuccessHandler(setClubSignupList).fetchClubList();
+    google.script.run.withSuccessHandler(setClubSignupList).getClublist();
     google.script.run.withSuccessHandler(setFormState).getFormStatus();
     google.script.run.withSuccessHandler(updateUserDetails).getUserState();
   });
@@ -57,6 +57,7 @@
       resetAlerts();
       $alertPrimary = true;
     }
+    clubs = clubSignupList;
   }
   function setFormState(formState) {
     if (formState === "closed" || formState === "view") {

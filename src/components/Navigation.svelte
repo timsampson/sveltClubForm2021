@@ -13,7 +13,7 @@
 </script>
 
 <nav
-  class="flex items-center justify-between flex-wrap rounded-sm bg-blue-300 px-12 py-3"
+  class="flex items-center justify-between flex-wrap rounded-sm bg-gradient-to-r from-blue-500 to-blue-600 px-12 py-3"
 >
   <div class="flex-initial">
     <div>
@@ -26,11 +26,11 @@
   </div>
   <div>
     {#if !emailLoaded}
-      <p class="rounded-full py-1 px-6 bg-blue-800 text-white text-sm	">
+      <p class="rounded-full py-1 px-6 bg-indigo-500 text-white text-sm	">
         Signin
       </p>
     {:else}
-      <p class="rounded-full py-1 px-6 bg-blue-800 text-white text-sm	">
+      <p class="rounded-full py-1 px-6 bg-indigo-600 text-white text-sm	">
         Logged in as: {userEmail.slice(0, userEmail.indexOf("@"))}
       </p>
     {/if}
