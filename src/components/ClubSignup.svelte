@@ -45,6 +45,7 @@
       resetAlerts();
       $alertDanger = true;
     }
+    console.table($userDetails);
   }
   function setClubSignupList(clubSignupList) {
     if (formClosed || formSubmitted) {

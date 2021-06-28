@@ -10,7 +10,6 @@
     console.table(clubList);
   }
   import { fade } from "svelte/transition";
-  let visible = true;
 </script>
 
 <div class="mt-2 mx-auto p-4">
@@ -19,9 +18,8 @@
   </h1>
 
   {#if titles.length > 0}
-    <p />
     <table
-      transition:fade={{ duration: 1000 }}
+      in:fade={{ duration: 1000 }}
       class="table table-auto mx-auto text-sm border-blue-800 border-4"
     >
       <thead>

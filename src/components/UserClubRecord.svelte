@@ -3,18 +3,17 @@
     .withSuccessHandler(showUserClubRecord)
     .getAppliedClubsForUser();
   export let titles = [
-    "id",
     "name",
     "moderator",
     "description",
     "club Id",
     "club Name",
+    "status",
     "approved",
   ];
   export let records = [];
   function showUserClubRecord(allUserApplicationRecords) {
     records = allUserApplicationRecords;
-    console.table(records);
   }
 </script>
 
@@ -35,7 +34,6 @@
     <tbody>
       {#each records as record}
         <tr class="odd:bg-gray-200">
-          <td class="min-w-26 px-2 border border-blue-800">{record.id}</td>
           <td class="min-w-26 px-2 border border-blue-800">{record.name}</td>
           <td class="min-w-26 px-2 border border-blue-800"
             >{record.moderator}</td
@@ -48,6 +46,7 @@
           >
           <td class="min-w-26 px-2 border border-blue-800">{record.approved}</td
           >
+          <td class="min-w-26 px-2 border border-blue-800">{record.status}</td>
         </tr>
       {/each}
     </tbody>
