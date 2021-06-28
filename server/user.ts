@@ -50,29 +50,20 @@ function getClubsFilteredByLevel() {
     // filter the availabe clubs by matches with student details.
     let homeroomDetails = getUserHRDetails();
     let allclubs = getClublist();
-    Logger.log(`All clubs: ${allclubs}`)
     function isMatch(levelOptions) {
         let isMatch = false;
         levelOptions.forEach(element => {
-          Logger.log(`element is: ${element}`)
-          Logger.log(`homeroomDetails.grade is: ${homeroomDetails.grade}`)
-          Logger.log(`element == homeroomDetails.grade ${element == homeroomDetails.grade}`)
-          Logger.log(`homeroomDetails.level is: ${homeroomDetails.level}`)
-          Logger.log(`element == homeroomDetails.level ${element == homeroomDetails.level}`)
             if (element == homeroomDetails.grade  || element == homeroomDetails.level){
               isMatch = true;  
             }
         });
-        Logger.log(`isMatch is: ${isMatch}`)
         return isMatch;
     }
     let clubsByLevel = allclubs.filter(function (club) {
         // split club levels into array
         let levelOptions = club.level.split(",");
-        Logger.log(`level options ${levelOptions}`);
         return isMatch(levelOptions);
     });
-    Logger.log(clubsByLevel);
     return clubsByLevel;
 }
 function getAppliedClubsForUser() {
