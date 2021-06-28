@@ -1,13 +1,13 @@
 <script>
-  export let userEmail;
+  export let userEmail = "Loading...";
   export let emailLoaded;
   import { onMount } from "svelte";
+  import { fade } from "svelte/transition";
   emailLoaded = false;
   onMount(() => {
     google.script.run.withSuccessHandler(setEmail).getUserEmail();
   });
   function setEmail(email) {
-    emailLoaded = true;
     userEmail = email;
   }
 </script>
@@ -29,18 +29,13 @@
     </div>
   </div>
   <div>
-    {#if !emailLoaded}
-      <p
+    {#each [userEmail] as userEmail (userEmail)}
+      <div
+        in:fade={{ duration: 1000 }}
         class="rounded-full py-1 px-6 bg-blue-700 text-gray-300 text-sm border border-gray-300"
       >
-        Signin
-      </p>
-    {:else}
-      <p
-        class="rounded-full py-1 px-6 bg-blue-700 text-white text-sm border border-gray-300	"
-      >
         {userEmail.slice(0, userEmail.indexOf("@"))}
-      </p>
-    {/if}
+      </div>
+    {/each}
   </div>
 </nav>
