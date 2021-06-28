@@ -1,7 +1,7 @@
 <script>
-  import postcss from "postcss";
-
-  google.script.run.withSuccessHandler(showAvailableClubs).getClublist();
+  google.script.run
+    .withSuccessHandler(showAvailableClubs)
+    .getClubsFilteredByLevel();
   export let titles = [
     "Club Name",
     "Enrolled",

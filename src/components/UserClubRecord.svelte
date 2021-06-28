@@ -1,21 +1,27 @@
 <script>
   google.script.run
     .withSuccessHandler(showUserClubRecord)
-    .getAppliedClubForUser();
-  export let titles = ["id", "name"];
+    .getAppliedClubsForUser();
+  export let titles = [
+    "id",
+    "name",
+    "moderator",
+    "description",
+    "club Id",
+    "club Name",
+    "approved",
+  ];
   export let records = [];
-  function showUserClubRecord(allClubValues) {
-    records = allClubValues;
-    console.table(allClubValues);
+  function showUserClubRecord(allUserApplicationRecords) {
+    records = allUserApplicationRecords;
+    console.table(records);
   }
 </script>
 
 <div class="mt-2 mx-auto p-4">
   <div class="sm:text-center lg:text-left">
-    <h1
-      class="text-2xl tracking-tight font-extrabold text-gray-900 sm:text-5xl md:text-6xl"
-    >
-      <span>Club Record</span>
+    <h1 class="text-2xl text-center text-gray-900">
+      <span>Your Application Record</span>
     </h1>
   </div>
   <table class="table table-auto mx-auto text-sm border-blue-800 border-4">
@@ -30,8 +36,17 @@
       {#each records as record}
         <tr class="odd:bg-gray-200">
           <td class="min-w-26 px-2 border border-blue-800">{record.id}</td>
+          <td class="min-w-26 px-2 border border-blue-800">{record.name}</td>
           <td class="min-w-26 px-2 border border-blue-800"
-            >{record.student_name}</td
+            >{record.moderator}</td
+          >
+          <td class="min-w-26 px-2 border border-blue-800"
+            >{record.description}</td
+          >
+          <td class="min-w-26 px-2 border border-blue-800">{record.clubid}</td>
+          <td class="min-w-26 px-2 border border-blue-800">{record.clubname}</td
+          >
+          <td class="min-w-26 px-2 border border-blue-800">{record.approved}</td
           >
         </tr>
       {/each}

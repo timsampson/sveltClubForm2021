@@ -16,6 +16,13 @@ const studentSheet = schoolDB.getSheetByName("students");
 let studentValues = studentSheet.getDataRange().getValues();
 let studentRecords = sheetToObjArr(studentValues);
 
+const homeroomSheet = schoolDB.getSheetByName("homerooms");
+let homeroomValues = homeroomSheet.getDataRange().getValues();
+let homeroomRecords = sheetToObjArr(homeroomValues);
+
+const hrAssignmentSheet = schoolDB.getSheetByName("hrAssignment2021");
+let hrAssignmentValues = hrAssignmentSheet.getDataRange().getValues();
+let hrAssignmentRecords = sheetToObjArr(hrAssignmentValues);
 
 const clubSheet = clubDB.getSheetByName("clubs");
 let clubValues = clubSheet.getDataRange().getValues();
@@ -27,6 +34,7 @@ function getClublist(){
 
 const clubApplicationSheet = clubDB.getSheetByName("club_application");
 let clubApplicationValues = clubApplicationSheet.getDataRange().getDisplayValues();
+let clubApplicationRecords = sheetToObjArr(clubApplicationValues);
 
 const clubEnrollmentSheet = clubDB.getSheetByName("club_enrollment");
 let clubEnrollmentValues = clubEnrollmentSheet.getDataRange().getDisplayValues();
