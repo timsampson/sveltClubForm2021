@@ -11,7 +11,7 @@
 
 <div class="mt-2 mx-auto p-4">
   <h1 class="text-2xl text-center text-gray-900">
-    <span>Club Choices</span>
+    <span>Below are the clubs currently available.</span>
   </h1>
 
   {#if titles.length > 0}
