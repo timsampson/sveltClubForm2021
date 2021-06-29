@@ -1,5 +1,5 @@
 import { writable } from "svelte/store";
-export const notice = writable("Welcome to the app");
+export const notice = writable("");
 export function resetAlerts() {
   alertInfo.set(false);
   alertDanger.set(false);

@@ -20,47 +20,50 @@
     name: "",
   };
   onMount(() => {
-    $notice = `Please wait while your choices load. `;
-    $alertInfo = true;
+    notice.set(`Please wait while your choices load. `);
+    resetAlerts();
+    alertInfo.set(true);
     google.script.run.withSuccessHandler(setClubSignupList).getClubsFilteredByLevel();
     google.script.run.withSuccessHandler(updateUserDetails).getUserState();
   });
   function handleSubmit() {
     userDetails.formSubmitted = true;
     google.script.run.withSuccessHandler(clubSubmissionResponse).setRecordClubEntry(selected.id);
-    $notice = `Thanks for your application for ${selected.name} club. `;
-    // resetAlerts();
-    $alertInfo = true;
+    notice.set(`Thanks for your application for ${selected.name} club. `);
+    resetAlerts();
+    alertInfo.set(true);
   }
   function updateUserDetails(updatedUserDetails) {
     $userDetails = updatedUserDetails;
     console.log("userDetails");
     console.table($userDetails);
     if ($userDetails.formStatus === "closed" || $userDetails.formStatus === "view") {
-      $notice = `The form is not currently taking applications`;
+      notice.set(`The form is not currently taking applications`);
       console.log("formStatus");
       formClosed = true;
-      $alertDanger = true;
+      resetAlerts();
+      alertDanger.set(true);
     } else {
       formClosed = false;
     }
     if ($userDetails.hasPendingClub) {
-      $notice = `You cannot signup at this time because you have a pending club approval. `;
-      $alertDanger = true;
+      notice.set(`You cannot signup at this time because you have a pending club approval. `);
+      resetAlerts();
+      alertDanger.set(true);
     }
   }
   function setClubSignupList(clubSignupList) {
     if (formClosed || userDetails.formSubmitted) {
-      $notice = `The form is not currently taking applications. `;
+      notice.set(`The form is not currently taking applications. `);
       formClosed = true;
       resetAlerts();
-      $alertDanger = true;
+      alertDanger.set(true);
     } else {
       clubsLoaded = true;
       clubs = clubSignupList;
-      $notice = `Please select a club from the list`;
+      notice.set(`Please select a club from the list`);
       resetAlerts();
-      $alertPrimary = true;
+      alertPrimary.set(true);
     }
     clubs = clubSignupList;
   }
@@ -69,30 +72,37 @@
     approvalResponse = response;
     resetAlerts();
     if (approvalResponse.processed) {
-      $notice = `Your response has been received for the ${approvalResponse.clubName} club.`;
-      $alertSuccess = true;
+      notice.set(`Your response has been received for the ${approvalResponse.clubName} club.`);
+      alertSuccess.set(true);
     }
     if (!approvalResponse.hasCapacity) {
-      $notice = `{$notice} Sorry the club you've chosen is full.`;
-      $alertDanger = true;
+      notice.set(`{$notice} Sorry the club you've chosen is full.`);
+      alertDanger.set(true);
     } else {
-      $notice = `${$notice} Please check your email for confimation of enrollment.`;
-      $alertDanger = true;
+      notice.set(`${$notice} Please check your email for confimation of enrollment.`);
+      alertDanger.set(true);
     }
   }
   function updateOnDropdownChange() {
     resetAlerts();
     if (formClosed) {
-      $notice = `The form is not currently taking applications`;
+      notice.set(`The form is not currently taking applications.`);
       formClosed = true;
-      $alertDanger = true;
+      alertDanger.set(true);
     } else if (userDetails.formSubmitted) {
-      $notice = `The form has been submitted`;
+      notice.set(`The form has been submitted.`);
       formClosed = true;
-      $alertDanger = true;
+      $alertDanger.set(true);
     } else {
-      $notice = `You've chosen the ${selected.name} club`;
-      $alertPrimary = true;
+      notice.set(`You've chosen the ${selected.name} club.`);
+      alertPrimary.set(true);
+    }
+    if ($userDetails.hasPendingClub) {
+      resetAlerts();
+      notice.set(
+        `${$notice} You cannot signup at this time because you have a pending club approval. `
+      );
+      alertDanger.set(true);
     }
   }
 </script>
