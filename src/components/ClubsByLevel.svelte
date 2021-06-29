@@ -1,13 +1,10 @@
 <script>
-  google.script.run
-    .withSuccessHandler(showAvailableClubs)
-    .getClubsFilteredByLevel();
+  google.script.run.withSuccessHandler(showAvailableClubs).getClubsFilteredByLevel();
   let titles = [];
   let clubs = {};
   function showAvailableClubs(clubList) {
     titles = ["Club Name", "Enrolled", "Capacity", "Details", "Moderator"];
     clubs = clubList;
-    console.table(clubList);
   }
   import { fade } from "svelte/transition";
 </script>
@@ -25,27 +22,17 @@
       <thead>
         <tr class="bg-gradient-to-r from-blue-500 to-blue-600">
           {#each titles as title, i (titles[i])}
-            <th class="capitalize text-white px-2 border border-blue-800"
-              >{title}</th
-            >
+            <th class="capitalize text-white px-2 border border-blue-800">{title}</th>
           {/each}
         </tr>
       </thead>
       <tbody>
         {#each clubs as club}
-          <tr
-            class="odd:bg-gray-200"
-            class:club-full={club.enrolled >= club.capacity}
-          >
+          <tr class="odd:bg-gray-200" class:club-full={club.enrolled >= club.capacity}>
             <td class="mx-2 px-2 border border-blue-800">{club.name}</td>
-            <td class="px-2 border border-blue-800 text-center"
-              >{club.enrolled}</td
-            >
-            <td class="px-2 border border-blue-800 text-center"
-              >{club.capacity}</td
-            >
-            <td class="mx-2  px-2 border border-blue-800">{club.description}</td
-            >
+            <td class="px-2 border border-blue-800 text-center">{club.enrolled}</td>
+            <td class="px-2 border border-blue-800 text-center">{club.capacity}</td>
+            <td class="mx-2  px-2 border border-blue-800">{club.description}</td>
             <td class="mx-2 px-2 border border-blue-800">{club.moderator}</td>
           </tr>
         {/each}

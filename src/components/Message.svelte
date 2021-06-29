@@ -1,17 +1,11 @@
 <script>
-  import {
-    notice,
-    alertInfo,
-    alertDanger,
-    alertPrimary,
-    alertSuccess,
-  } from "../messageStores.js";
+  import { notice, alertInfo, alertDanger, alertPrimary, alertSuccess } from "../messageStores.js";
 </script>
 
 {#if $notice}
   <div>
     <p
-      class="text-center text-white rounded-md p-2 my-2 mx-auto md:max-w-2xl"
+      class="text-center text-white rounded-md p-2 my-2 mx-auto w-3/4"
       class:bg-gradient-to-r={$alertInfo}
       class:from-blue-400={$alertInfo}
       class:to-blue-600={$alertInfo}

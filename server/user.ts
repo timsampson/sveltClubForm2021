@@ -12,16 +12,18 @@ async function getUserState() {
     currentClubName: undefined,
     currentClubId: undefined,
     isModerator: undefined,
+    formStatus: 'view',
   };
-  let userClubDetails = await getUserCurrentClubDetails();
+  let userClubDetails = getUserCurrentClubDetails();
   let userDetails = await getStudentInfo();
   let homeroomDetails = await getUserHRDetails();
+  userState.formStatus = getFormStatus();
   if (userDetails) {
     userState.isStudent = true;
   }
   userState.name = userDetails.full_name;
   userState.homeroom = homeroomDetails.homeroom;
-  userState.school = homeroomDetails.school;
+  userState.school = homeroomDetails.level;
   userState.grade = homeroomDetails.grade;
   if (userClubDetails) {
     userState.currentClubName = userClubDetails.club_name;
@@ -52,12 +54,19 @@ function getStudentInfo() {
   });
   return filteredStudentInfo[0];
 }
+
 function getUserCurrentClubDetails() {
-  let currentClubHRDetails = clubEnrollmentRecords.filter(function (student) {
+  let currentClubDetails = clubEnrollmentRecords.filter(function (student) {
     return student.email == getUserEmail();
   });
-  return currentClubHRDetails[0];
+  let clubDetails = {isInClub: false, club_name: '', club_id: 0};
+  if (currentClubDetails.length > 0) {
+    clubDetails = { ...currentClubDetails[0]};
+    clubDetails.isInClub = true;
+  }
+  return clubDetails;
 }
+function isInClub() {}
 function getPendingClubsForUser() {
   let pendingClubsForUser = clubApplicationRecords.filter(function (record) {
     return record.email == getUserEmail() && record.status == "pending";
@@ -73,10 +82,7 @@ function getClubsFilteredByLevel() {
   function isMatch(levelOptions) {
     let isMatch = false;
     levelOptions.forEach((element) => {
-      if (
-        element == homeroomDetails.grade ||
-        element == homeroomDetails.level
-      ) {
+      if (element == homeroomDetails.grade || element == homeroomDetails.level) {
         isMatch = true;
       }
     });
@@ -90,16 +96,11 @@ function getClubsFilteredByLevel() {
   return clubsByLevel;
 }
 function getAppliedClubsForUser() {
-  let filteredClubEnrollmentRecords = clubApplicationRecords.filter(function (
-    application
-  ) {
+  let filteredClubEnrollmentRecords = clubApplicationRecords.filter(function (application) {
     return application.email == getUserEmail();
   });
   return filteredClubEnrollmentRecords;
 }
 function currentUser(value: { name: string }) {
   return value.name == getUserEmail();
-}
-function setRecordClubEntry() {
-  return 1;
 }
