@@ -11,8 +11,10 @@ export const userDetails = writable({
   isInClub: undefined,
   hasPendingClub: undefined,
   currentClubName: undefined,
+  currentClubName: undefined,
   currentClubId: undefined,
   isModerator: undefined,
   formSubmitted: false,
   formState: undefined,
+  canSubmit: undefined,
 });

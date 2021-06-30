@@ -7,12 +7,14 @@ async function getUserState() {
     homeroom: undefined,
     userRole: undefined,
     isStudent: undefined,
-    isInClub: undefined,
+    isInClub: false,
     hasPendingClub: undefined,
+    pendingClubName: undefined,
     currentClubName: undefined,
     currentClubId: undefined,
     isModerator: undefined,
-    formStatus: 'view',
+    formStatus: undefined,
+    canSubmit: undefined,
   };
   let userClubDetails = getUserCurrentClubDetails();
   let userDetails = await getStudentInfo();
@@ -30,13 +32,20 @@ async function getUserState() {
     userState.currentClubId = userClubDetails.club_id;
     userState.isInClub = true;
   }
-  let hasPendingClub = getPendingClubsForUser();
-  if (hasPendingClub.length > 0) {
+  else {
+    userState.isInClub = false;
+  }
+  let pendingClub = getPendingClubsForUser();
+  if (pendingClub.length > 0) {
     userState.hasPendingClub = true;
+    userState.pendingClubName = pendingClub[0].clubname;
   } else {
     userState.hasPendingClub = false;
   }
-
+  userState.canSubmit =
+    (userState.formStatus === "submit" && !userState.isInClub) ||
+    userState.formStatus === "approval" ||
+    userState.formStatus === "edit";
   return userState;
 }
 function getUserEmail() {
@@ -59,14 +68,14 @@ function getUserCurrentClubDetails() {
   let currentClubDetails = clubEnrollmentRecords.filter(function (student) {
     return student.email == getUserEmail();
   });
-  let clubDetails = {isInClub: false, club_name: '', club_id: 0};
+  let clubDetails = { isInClub: false, club_name: "", club_id: 0 };
   if (currentClubDetails.length > 0) {
-    clubDetails = { ...currentClubDetails[0]};
+    clubDetails = { ...currentClubDetails[0] };
     clubDetails.isInClub = true;
   }
   return clubDetails;
 }
-function isInClub() {}
+
 function getPendingClubsForUser() {
   let pendingClubsForUser = clubApplicationRecords.filter(function (record) {
     return record.email == getUserEmail() && record.status == "pending";

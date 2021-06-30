@@ -6,9 +6,9 @@
   <p
     class="text-center text-white rounded-md p-2 my-2 mx-auto w-3/4"
     class:bg-gradient-to-r={$alertInfo}
-    class:from-blue-400={$alertInfo}
+    class:from-blue-500={$alertInfo}
     class:to-blue-600={$alertInfo}
-    class:bg-indigo-500={$alertPrimary}
+    class:bg-yellow-500={$alertPrimary}
     class:bg-green-500={$alertSuccess}
     class:bg-red-500={$alertDanger}
   >

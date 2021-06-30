@@ -34,10 +34,10 @@
     alertInfo.set(true);
   }
   function updateUserDetails(updatedUserDetails) {
-    $userDetails = updatedUserDetails;
+    userDetails.set(updatedUserDetails);
     console.log("userDetails");
     console.table($userDetails);
-    if ($userDetails.formStatus === "closed" || $userDetails.formStatus === "view") {
+    if (!$userDetails.canSubmit) {
       notice.set(`The form is not currently taking applications`);
       console.log("formStatus");
       formClosed = true;
@@ -46,14 +46,27 @@
     } else {
       formClosed = false;
     }
-    if ($userDetails.hasPendingClub) {
-      notice.set(`You cannot signup at this time because you have a pending club approval. `);
+    if (userDetails.hasPendingClub) {
+      notice.set(
+        `You cannot change your club while you have a pending approval for ${userDetails.pendingClubName}. Please contact the club administrator. `
+      );
+      resetAlerts();
+      alertDanger.set(true);
+      formClosed = true;
+    } else if (userDetails.isInClub && userDetails.formStatus !== "edit") {
+      notice.set(`You may change your club.`);
+      resetAlerts();
+      alertDanger.set(true);
+    } else if (userDetails.isInClub && userDetails.formStatus !== "approval") {
+      notice.set(
+        `You are currently enrolled in the ${userDetails.currentClubName} and have a pending club approval for ${userDetails.pendingClubName}. Contact the club adminstrator about your pending club.  `
+      );
       resetAlerts();
       alertDanger.set(true);
     }
   }
   function setClubSignupList(clubSignupList) {
-    if (formClosed || userDetails.formSubmitted) {
+    if (userDetails.formClosed || userDetails.formSubmitted) {
       notice.set(`The form is not currently taking applications. `);
       formClosed = true;
       resetAlerts();
@@ -100,7 +113,7 @@
     if ($userDetails.hasPendingClub) {
       resetAlerts();
       notice.set(
-        `${$notice} You cannot signup at this time because you have a pending club approval. `
+        `${$notice} You cannot signup at this time because you have a pending club approval for the ${$userDetails.pendingClubName} club. `
       );
       alertDanger.set(true);
     }

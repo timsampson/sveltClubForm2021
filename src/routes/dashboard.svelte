@@ -1,7 +1,7 @@
 <script>
-  import UserClubApplicationRecord from "../components/UserClubApplicationRecord.svelte";
-  import UserCurrentClubDetails from "../components/UserCurrentClubDetails.svelte";
+  import UserClubApplicationTable from "../components/UserClubApplicationTable.svelte";
+  import UserCurrentClubNotice from "../components/UserCurrentClubNotice.svelte";
 </script>
 
-<UserCurrentClubDetails />
-<UserClubApplicationRecord />
+<UserCurrentClubNotice />
+<UserClubApplicationTable />
