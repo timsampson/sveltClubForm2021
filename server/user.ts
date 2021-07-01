@@ -1,13 +1,13 @@
 async function getUserState() {
   let userState = {
     email: getUserEmail(),
+    isInClub: false,
     name: undefined,
-    school: undefined,
     grade: undefined,
+    school: undefined,
     homeroom: undefined,
     userRole: undefined,
     isStudent: undefined,
-    isInClub: false,
     hasPendingClub: undefined,
     pendingClubName: undefined,
     currentClubName: undefined,
@@ -16,7 +16,7 @@ async function getUserState() {
     formStatus: undefined,
     canSubmit: undefined,
   };
-  let userClubDetails = getUserCurrentClubDetails();
+  let userClubDetails = await getUserCurrentClubDetails();
   let userDetails = await getStudentInfo();
   let homeroomDetails = await getUserHRDetails();
   userState.formStatus = getFormStatus();
@@ -27,7 +27,7 @@ async function getUserState() {
   userState.homeroom = homeroomDetails.homeroom;
   userState.school = homeroomDetails.level;
   userState.grade = homeroomDetails.grade;
-  if (userClubDetails) {
+  if (userClubDetails.isInClub === true) {
     userState.currentClubName = userClubDetails.club_name;
     userState.currentClubId = userClubDetails.club_id;
     userState.isInClub = true;
@@ -64,7 +64,7 @@ function getStudentInfo() {
   return filteredStudentInfo[0];
 }
 
-function getUserCurrentClubDetails() {
+async function getUserCurrentClubDetails() {
   let currentClubDetails = clubEnrollmentRecords.filter(function (student) {
     return student.email == getUserEmail();
   });

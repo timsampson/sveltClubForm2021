@@ -29,7 +29,7 @@
   function handleSubmit() {
     userDetails.formSubmitted = true;
     google.script.run.withSuccessHandler(clubSubmissionResponse).setRecordClubEntry(selected.id);
-    notice.set(`Thanks for your application for ${selected.name} club. `);
+    notice.set(`Your application for the ${selected.name} club is being processed. `);
     resetAlerts();
     alertInfo.set(true);
   }
@@ -46,27 +46,27 @@
     } else {
       formClosed = false;
     }
-    if (userDetails.hasPendingClub) {
+    if ($userDetails.hasPendingClub) {
       notice.set(
-        `You cannot change your club while you have a pending approval for ${userDetails.pendingClubName}. Please contact the club administrator. `
+        `You cannot change your club while you have a pending approval for ${$userDetails.pendingClubName}. Please contact the club administrator. `
       );
       resetAlerts();
       alertDanger.set(true);
       formClosed = true;
-    } else if (userDetails.isInClub && userDetails.formStatus !== "edit") {
+    } else if ($userDetails.isInClub && $userDetails.formStatus !== "edit") {
       notice.set(`You may change your club.`);
       resetAlerts();
       alertDanger.set(true);
-    } else if (userDetails.isInClub && userDetails.formStatus !== "approval") {
+    } else if ($userDetails.isInClub && $userDetails.formStatus !== "approval") {
       notice.set(
-        `You are currently enrolled in the ${userDetails.currentClubName} and have a pending club approval for ${userDetails.pendingClubName}. Contact the club adminstrator about your pending club.  `
+        `You are currently enrolled in the ${$userDetails.currentClubName} and have a pending club approval for ${$userDetails.pendingClubName}. Contact the club adminstrator about your pending club.  `
       );
       resetAlerts();
       alertDanger.set(true);
     }
   }
   function setClubSignupList(clubSignupList) {
-    if (userDetails.formClosed || userDetails.formSubmitted) {
+    if ($userDetails.formClosed || $userDetails.formSubmitted) {
       notice.set(`The form is not currently taking applications. `);
       formClosed = true;
       resetAlerts();
@@ -82,13 +82,13 @@
   }
   function clubSubmissionResponse(response) {
     formResponseReceived = true;
-    approvalResponse = response;
+    console.table(response);
     resetAlerts();
-    if (approvalResponse.processed) {
-      notice.set(`Your response has been received for the ${approvalResponse.clubName} club.`);
+    if (response.processed) {
+      notice.set(`Your response has been received for the ${response.clubName} club.`);
       alertSuccess.set(true);
     }
-    if (!approvalResponse.hasCapacity) {
+    if (!response.hasCapacity) {
       notice.set(`{$notice} Sorry the club you've chosen is full.`);
       alertDanger.set(true);
     } else {
@@ -102,20 +102,20 @@
       notice.set(`The form is not currently taking applications.`);
       formClosed = true;
       alertDanger.set(true);
-    } else if (userDetails.formSubmitted) {
+    } else if ($userDetails.formSubmitted) {
       notice.set(`The form has been submitted.`);
       formClosed = true;
       $alertDanger.set(true);
-    } else {
-      notice.set(`You've chosen the ${selected.name} club.`);
-      alertPrimary.set(true);
-    }
-    if ($userDetails.hasPendingClub) {
+    } else if ($userDetails.hasPendingClub) {
       resetAlerts();
+      formClosed = true;
       notice.set(
         `${$notice} You cannot signup at this time because you have a pending club approval for the ${$userDetails.pendingClubName} club. `
       );
       alertDanger.set(true);
+    } else {
+      notice.set(`You've chosen the ${selected.name} club.`);
+      alertPrimary.set(true);
     }
   }
 </script>

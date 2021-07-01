@@ -1,3 +1,7 @@
+function testsetrecord(){
+    setRecordClubEntry(2).then((value) => Logger.log(value))
+}
+
 function clubApplicationId() {
   let lastRecordRow = clubApplicationSheet.getLastRow() + 1;
   let formApplicationDate = new Date();
@@ -7,9 +11,12 @@ function clubApplicationId() {
   return recordId;
 }
 async function setRecordClubEntry(clubId: string | number) {
-  let currentClubDetails = getUserCurrentClubDetails();
-  let applicationResponse = {
+  let application = {
+    email: "",
     appliedClubId: clubId,
+    appliedClubName: "",
+    appliedClubDetails: "",
+    appliedclubModerator: "",
     received: false,
     recordId: "0",
     formStatus: "closed",
@@ -18,17 +25,28 @@ async function setRecordClubEntry(clubId: string | number) {
     isInClub: false,
     applicationStatus: "rejected",
     processed: false,
+    name: undefined,
+    grade: undefined,
+    school: undefined,
+    homeroom: undefined,
+    userRole: undefined,
+    isStudent: undefined,
+    pendingClubName: undefined,
+    currentClubName: undefined,
+    currentClubId: undefined,
+    isModerator: undefined,
+    canSubmit: undefined,
   };
-  applicationResponse.formStatus = getFormStatus();
+  let userState = await getUserState();
+  let applicationResponse = { ...application, ...userState };
+  applicationResponse.formStatus = await getFormStatus();
   // get the club details for id
   let appliedClubDetails = {
     enrolled: 0,
     capacity: 0,
     name: "",
   };
-  appliedClubDetails = getClubDetails(clubId);
-  applicationResponse.isInClub = currentClubDetails.isInClub;
-
+  appliedClubDetails = await getClubDetails(clubId);
   // check to see if the club is full
   applicationResponse.received = true;
   if (appliedClubDetails.enrolled < appliedClubDetails.capacity) {
@@ -73,5 +91,21 @@ async function setRecordClubEntry(clubId: string | number) {
   // if found, update it
 
   // send email with confirmation the application has been processed
+  function sendApplicationResponseEmail(applicationResponse) {
+    const htmlBody = HtmlService.createTemplateFromFile("welcome-mail");
+    htmlBody.stuName = applicationResponse.name;
+    htmlBody.clubName = applicationResponse.appliedClubName;
+    htmlBody.clubDetails = applicationResponse.appliedClubDetails;
+    htmlBody.clubModerator = applicationResponse.appliedclubModerator;
+    const emailHtml = htmlBody.evaluate().getContent();
+    const email = applicationResponse.email;
+    let welcomeMessage = `Welcome to the ${applicationResponse.appliedClubName} club!`;
+    MailApp.sendEmail({
+      // cc: ccEmail,
+      htmlBody: emailHtml,
+      subject: welcomeMessage,
+      to: email,
+    });
+  }
   return applicationResponse;
 }
