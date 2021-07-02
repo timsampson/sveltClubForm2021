@@ -1,11 +1,9 @@
 <script>
-  import ClubSignUp from "../components/ClubSignupForm.svelte";
-  import ClubsByLevel from "../components/ClubsByLevel.svelte";
-  import UserCurrentClubDetails from "../components/UserCurrentClubNotice.svelte";
+  import ClubSignupForm from "../components/ClubSignupForm.svelte";
+  import ClubsByLevelTable from "../components/ClubsByLevelTable.svelte";
   import BannerMessage from "../components/BannerMessage.svelte";
 </script>
 
 <BannerMessage />
-<ClubSignUp />
-<UserCurrentClubDetails />
-<ClubsByLevel />
+<ClubSignupForm />
+<ClubsByLevelTable />

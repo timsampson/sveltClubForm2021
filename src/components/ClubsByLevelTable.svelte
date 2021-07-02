@@ -1,20 +1,23 @@
 <script>
+  import { fade } from "svelte/transition";
   google.script.run.withSuccessHandler(showAvailableClubs).getClubsFilteredByLevel();
-  let titles = [];
+  let titles = ["Club Name", "Enrolled", "Capacity", "Details", "Moderator"];
   let clubs = {};
   function showAvailableClubs(clubList) {
-    titles = ["Club Name", "Enrolled", "Capacity", "Details", "Moderator"];
     clubs = clubList;
   }
-  import { fade } from "svelte/transition";
 </script>
 
 <div class="mt-2 mx-auto p-4">
-  <h1 class="text-2xl text-center text-gray-900">
-    <span>Below are the clubs currently available.</span>
+  <h1 class="text-2xl text-center text-blue-900">
+    {#if clubs.length > 0}
+      Below are the currently available clubs.
+    {:else}
+      Please wait for the available clubs to load.
+    {/if}
   </h1>
 
-  {#if titles.length > 0}
+  {#if clubs.length > 0}
     <table
       in:fade={{ duration: 1000 }}
       class="table table-auto mx-auto text-sm border-blue-800 border-4"
