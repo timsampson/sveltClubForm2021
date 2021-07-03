@@ -1,5 +1,5 @@
-function testsetrecord(){
-    setRecordClubEntry(2).then((value) => Logger.log(value))
+function testsetrecord() {
+  setRecordClubEntry(2).then((value) => Logger.log(value));
 }
 
 function clubApplicationId() {
@@ -11,101 +11,127 @@ function clubApplicationId() {
   return recordId;
 }
 async function setRecordClubEntry(clubId: string | number) {
+  let clubDetails = await getClubDetails(clubId);
+  let userState = await getUserState();
+  let formStatus = await getFormStatus();
+  let clubRecordId = clubApplicationId();
+
   let application = {
-    email: "",
+    email: getUserEmail(),
     appliedClubId: clubId,
-    appliedClubName: "",
-    appliedClubDetails: "",
-    appliedclubModerator: "",
-    received: false,
-    recordId: "0",
-    formStatus: "closed",
-    hasCapacity: false,
-    hasPendingClub: false,
-    isInClub: false,
-    applicationStatus: "rejected",
+    appliedClubName: clubDetails.name,
+    appliedClubDetails: clubDetails.description,
+    appliedclubModerator: clubDetails.moderator,
+    received: true,
+    recordId: clubRecordId,
+    formStatus: formStatus,
+    hasCapacity: clubDetails.enrolled < clubDetails.capacity,
+    hasPendingClub: userState.hasPendingClub,
+    isInClub: userState.isInClub,
+    applicationStatus: "",
     processed: false,
-    name: undefined,
-    grade: undefined,
-    school: undefined,
-    homeroom: undefined,
+    name: userState.name,
+    grade: userState.grade,
+    school: userState.school,
+    homeroom: userState.homeroom,
     userRole: undefined,
-    isStudent: undefined,
+    isStudent: userState.isStudent,
     pendingClubName: undefined,
-    currentClubName: undefined,
+    currentClubName: userState.currentClubName,
     currentClubId: undefined,
     isModerator: undefined,
-    canSubmit: undefined,
+    canSubmit: userState.canSubmit,
   };
-  let userState = await getUserState();
-  let applicationResponse = { ...application, ...userState };
-  applicationResponse.formStatus = await getFormStatus();
-  // get the club details for id
-  let appliedClubDetails = {
-    enrolled: 0,
-    capacity: 0,
-    name: "",
-  };
-  appliedClubDetails = await getClubDetails(clubId);
   // check to see if the club is full
-  applicationResponse.received = true;
-  if (appliedClubDetails.enrolled < appliedClubDetails.capacity) {
-    applicationResponse.hasCapacity = true;
-  } else {
-    applicationResponse.hasCapacity = false;
-  }
   // approval process
-  if (applicationResponse.formStatus == "submit" && !applicationResponse.isInClub) {
-    applicationResponse.formStatus = "approved";
-    applicationResponse.processed = true;
-  } else if (applicationResponse.formStatus == "submit" && applicationResponse.isInClub) {
-    applicationResponse.formStatus = "pending";
-    applicationResponse.processed = false;
-  } else if (applicationResponse.formStatus == "edit") {
-    applicationResponse.formStatus = "approved";
-    applicationResponse.processed = true;
-  } else if (applicationResponse.formStatus == "approval") {
-    applicationResponse.formStatus = "pending";
-    applicationResponse.processed = false;
+  if (application.hasCapacity) {
+    if (application.formStatus == "submit" && !application.isInClub) {
+      application.formStatus = "approved";
+      application.processed = true;
+    } else if (application.formStatus == "submit" && application.isInClub) {
+      application.formStatus = "pending";
+      application.processed = false;
+    } else if (application.formStatus == "edit") {
+      application.formStatus = "approved";
+      application.processed = true;
+    } else if (application.formStatus == "approval") {
+      application.formStatus = "pending";
+      application.processed = false;
+    } else {
+      application.formStatus = "rejected";
+      application.processed = false;
+    }
   } else {
-    applicationResponse.formStatus = "rejected";
-    applicationResponse.processed = false;
+    application.formStatus = "rejected";
+    application.processed = false;
   }
-  if (applicationResponse.formStatus == "approved" && !applicationResponse.isInClub) {
+  sendapplicationEmail(application);
+    logClubApplication(application);
+  if (application.formStatus == "approved" && !application.isInClub) {
     // send welcome email  to the club
     // append log to the log record
     // append enrollment to the enrollment record
-  } else if (applicationResponse.formStatus == "approved" && applicationResponse.isInClub) {
+  } else if (application.formStatus == "approved" && application.isInClub) {
     // send welcome email to the club
     // append log to the log record
     // *edit* enrollment to the enrollment record
-  } else if (applicationResponse.formStatus == "pending") {
+  } else if (application.formStatus == "pending") {
     // send email club application is pending
     // append log to the log record
   }
   // write the log
-  applicationResponse.recordId = clubApplicationId();
 
   // if not found, append it
 
   // if found, update it
-
   // send email with confirmation the application has been processed
-  function sendApplicationResponseEmail(applicationResponse) {
-    const htmlBody = HtmlService.createTemplateFromFile("welcome-mail");
-    htmlBody.stuName = applicationResponse.name;
-    htmlBody.clubName = applicationResponse.appliedClubName;
-    htmlBody.clubDetails = applicationResponse.appliedClubDetails;
-    htmlBody.clubModerator = applicationResponse.appliedclubModerator;
-    const emailHtml = htmlBody.evaluate().getContent();
-    const email = applicationResponse.email;
-    let welcomeMessage = `Welcome to the ${applicationResponse.appliedClubName} club!`;
-    MailApp.sendEmail({
-      // cc: ccEmail,
-      htmlBody: emailHtml,
-      subject: welcomeMessage,
-      to: email,
-    });
-  }
-  return applicationResponse;
+
+  return application;
+}
+function logClubApplication(application){
+  let formSubmissionDate = new Date();
+  let applicationLogRecord = [
+    application.recordId,
+    formSubmissionDate,
+    application.email,
+    application.appliedClubId,
+    application.appliedClubName,
+    application.appliedClubDetails,
+    application.appliedclubModerator,
+    application.received,
+    application.formStatus,
+    application.hasCapacity,
+    application.hasPendingClub,
+    application.isInClub,
+    application.applicationStatus,
+    application.processed,
+    application.name,
+    application.grade,
+    application.school,
+    application.homeroom,
+    application.userRole,
+    application.isStudent,
+    application.pendingClubName,
+    application.currentClubName,
+    application.currentClubId,
+    application.isModerator,
+    application.canSubmit
+  ]
+  clubApplicationSheet.appendRow(applicationLogRecord)
+}
+function sendapplicationEmail(application) {
+  const htmlBody = HtmlService.createTemplateFromFile("welcome-mail");
+  htmlBody.stuName = application.name;
+  htmlBody.clubName = application.appliedClubName;
+  htmlBody.clubDetails = application.appliedClubDetails;
+  htmlBody.clubModerator = application.appliedclubModerator;
+  const emailHtml = htmlBody.evaluate().getContent();
+  const email = application.email;
+  let welcomeMessage = `Welcome to the ${application.appliedClubName} club!`;
+  MailApp.sendEmail({
+    // cc: ccEmail,
+    htmlBody: emailHtml,
+    subject: welcomeMessage,
+    to: email,
+  });
 }

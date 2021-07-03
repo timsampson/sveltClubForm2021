@@ -39,21 +39,23 @@
       notice.set(
         `You have submitted an application for the ${$userDetails.selectedclub} club. Please check your email for confirmation.`
       );
-    } else if (
-      $userDetails.formStatus === "view" ||
-      $userDetails.formStatus === "closed" ||
-      $userDetails.hasPendingclub
-    ) {
+    } else if (!$userDetails.canSubmit) {
       formClosed = true;
-      if ($userDetails.hasPendingclub) {
+      if ($userDetails.isInClub) {
+        notice.set(
+          `You are already in the ${$userDetails.currentClubName} club and changes are not currently permitted.`
+        );
+      }
+      if ($userDetails.hasPendingClub) {
         notice.set(
           `You have a pending approval for ${$userDetails.pendingClubName}. The form is currently closed.`
         );
-      } else {
-        notice.set(
-          `We are not currently accepting club applications, the form status is ${$userDetails.formStatus}.`
-        );
       }
+    } else if ($userDetails.formStatus === "view" || $userDetails.formStatus === "closed") {
+      formClosed = true;
+      notice.set(
+        `We are not currently accepting club applications, the form status is ${$userDetails.formStatus}.`
+      );
     } else if ($userDetails.formStatus === "submit") {
       if (!$userDetails.isInClub) {
         formClosed = true;
