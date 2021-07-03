@@ -118,11 +118,7 @@
     }
   }
   function updateOnDropdownChange() {
-    if (
-      !$userDetails.formSubmitted ||
-      $userDetails.formStatus === "view" ||
-      $userDetails.formStatus === "closed"
-    ) {
+    if (!formClosed) {
       alertSuccess.set(true);
       notice.set(`You have selected the ${selected.name} club`);
       $alertPrimary = true;
