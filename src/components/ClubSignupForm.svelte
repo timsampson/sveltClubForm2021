@@ -37,7 +37,7 @@
   function updateFormMessage() {
     if ($userDetails.formSubmitted) {
       notice.set(
-        `You have submitted an application for the ${$userDetails.selectedclub} club. Please check your email for confirmation.`
+        `You have submitted an application for the ${selected.name} club. Please check your email for confirmation.`
       );
     } else if (!$userDetails.canSubmit) {
       formClosed = true;
@@ -77,8 +77,8 @@
       formClosed = false;
       if ($userDetails.isInClub) {
         notice.set(
-          ` You are currently enrolled a club. Submitting will change your enrollment from the 
-          ${$userDetails.currentClub} to the ${$userDetails.selectedclub}`
+          ` You are currently enrolled a club. Submitting at the time will cancel your current enrollment in the 
+          ${$userDetails.currentClubName}.`
         );
       } else {
         notice.set(`Please select a club from the list.`);
@@ -118,9 +118,10 @@
     }
   }
   function updateOnDropdownChange() {
+    updateFormMessage();
     if (!formClosed) {
       alertSuccess.set(true);
-      notice.set(`You have selected the ${selected.name} club`);
+      notice.set(`${$notice} You have selected the ${selected.name} club.`);
       $alertPrimary = true;
     }
   }

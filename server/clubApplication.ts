@@ -41,32 +41,33 @@ async function setRecordClubEntry(clubId: string | number) {
     currentClubId: undefined,
     isModerator: undefined,
     canSubmit: userState.canSubmit,
+    isApproved: false
   };
   // check to see if the club is full
   // approval process
   if (application.hasCapacity) {
     if (application.formStatus == "submit" && !application.isInClub) {
       application.formStatus = "approved";
-      application.processed = true;
+      application.processed, application.isApproved = true;
     } else if (application.formStatus == "submit" && application.isInClub) {
       application.formStatus = "pending";
-      application.processed = false;
+      application.processed, application.isApproved = false;
     } else if (application.formStatus == "edit") {
       application.formStatus = "approved";
-      application.processed = true;
+      application.processed, application.isApproved = true;
     } else if (application.formStatus == "approval") {
       application.formStatus = "pending";
-      application.processed = false;
+       application.processed, application.isApproved = false;
     } else {
       application.formStatus = "rejected";
-      application.processed = false;
+       application.processed, application.isApproved = false;
     }
   } else {
     application.formStatus = "rejected";
-    application.processed = false;
+     application.processed, application.isApproved = false;
   }
   sendapplicationEmail(application);
-    logClubApplication(application);
+  logClubApplication(application);
   if (application.formStatus == "approved" && !application.isInClub) {
     // send welcome email  to the club
     // append log to the log record
@@ -88,36 +89,37 @@ async function setRecordClubEntry(clubId: string | number) {
 
   return application;
 }
-function logClubApplication(application){
+function logClubApplication(application) {
   let formSubmissionDate = new Date();
   let applicationLogRecord = [
     application.recordId,
     formSubmissionDate,
     application.email,
+    application.name,
+    application.school,
+    application.grade,
+    application.homeroom,
     application.appliedClubId,
     application.appliedClubName,
-    application.appliedClubDetails,
     application.appliedclubModerator,
-    application.received,
-    application.formStatus,
+    application.appliedClubDetails,
     application.hasCapacity,
+    application.canSubmit,
+    application.isApproved,
+    application.formStatus,
+    application.received,
     application.hasPendingClub,
+    application.pendingClubName,
     application.isInClub,
+    application.currentClubId,
+    application.currentClubName,
     application.applicationStatus,
     application.processed,
-    application.name,
-    application.grade,
-    application.school,
-    application.homeroom,
     application.userRole,
     application.isStudent,
-    application.pendingClubName,
-    application.currentClubName,
-    application.currentClubId,
     application.isModerator,
-    application.canSubmit
-  ]
-  clubApplicationSheet.appendRow(applicationLogRecord)
+  ];
+  clubApplicationSheet.appendRow(applicationLogRecord);
 }
 function sendapplicationEmail(application) {
   const htmlBody = HtmlService.createTemplateFromFile("welcome-mail");
