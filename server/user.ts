@@ -15,10 +15,12 @@ async function getUserState() {
     isModerator: undefined,
     formStatus: undefined,
     canSubmit: undefined,
+    isAdmin: undefined,
   };
   let userClubDetails = await getUserCurrentClubDetails();
   let userDetails = await getStudentInfo();
   let homeroomDetails = await getUserHRDetails();
+  userState.isAdmin = checkIsAdmin();
   userState.formStatus = getFormStatus();
   if (userDetails) {
     userState.isStudent = true;
@@ -113,4 +115,10 @@ function getAppliedClubsForUser() {
 }
 function currentUser(value: { name: string }) {
   return value.name == getUserEmail();
+}
+function checkIsAdmin(){
+  let filterdClubAdminsRecords = clubAdminsRecords.filter(function (admins) {
+    return admins.email === getUserEmail();
+  });
+  return filterdClubAdminsRecords.length > 0;
 }

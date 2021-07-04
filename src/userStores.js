@@ -17,4 +17,5 @@ export const userDetails = writable({
   formSubmitted: false,
   formState: undefined,
   canSubmit: undefined,
+  isAdmin: undefined,
 });

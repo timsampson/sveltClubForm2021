@@ -20,6 +20,10 @@ const hrAssignmentSheet = schoolDB.getSheetByName("hrAssignment2021");
 let hrAssignmentValues = hrAssignmentSheet.getDataRange().getValues();
 let hrAssignmentRecords = sheetToObjArr(hrAssignmentValues);
 
+const clubAdminsSheet = clubDB.getSheetByName("admins");
+let clubAdminsValues = clubAdminsSheet.getDataRange().getValues();
+let clubAdminsRecords = sheetToObjArr(clubAdminsValues);
+
 const clubSheet = clubDB.getSheetByName("clubs");
 let clubValues = clubSheet.getDataRange().getValues();
 let clubRecords = sheetToObjArr(clubValues);

@@ -6,4 +6,5 @@ export default {
     '/': Signup,
     '/home/': Home,
     '/dashboard/': Dashboard,
+    '/admin/' : Admin,
 }

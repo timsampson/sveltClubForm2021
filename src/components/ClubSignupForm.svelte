@@ -78,7 +78,7 @@
       if ($userDetails.isInClub) {
         notice.set(
           ` You are currently enrolled a club. Submitting at the time will cancel your current enrollment in the 
-          ${$userDetails.currentClubName}.`
+          ${$userDetails.currentClubName} club.`
         );
       } else {
         notice.set(`Please select a club from the list.`);
@@ -173,5 +173,21 @@
       </svg>
       <span>Submit</span>
     </button>
+    {#if formClosed && $userDetails.formStatus !== undefined && !$userDetails.formSubmitted}
+      {#if $userDetails.formStatus === "view"}
+        <br />
+        <span class="text-blue-900 italic"
+          >{`The form status is ${$userDetails.formStatus} only.`}</span
+        >
+      {:else if $userDetails.formStatus === "submit" && $userDetails.isInClub}
+        <br />
+        <span class="text-blue-900 italic"
+          >{`The form is only accepting enrolments for students not yet in clubs.`}</span
+        >
+      {:else}
+        <br />
+        <span class="text-blue-900 italic">{`The form status is ${$userDetails.formStatus}.`}</span>
+      {/if}
+    {/if}
   </form>
 </div>
