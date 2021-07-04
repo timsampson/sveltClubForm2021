@@ -3,6 +3,8 @@
   export let emailLoaded;
   import { onMount } from "svelte";
   import { fade } from "svelte/transition";
+  import { userDetails } from "../userStores.js";
+
   emailLoaded = false;
   onMount(() => {
     google.script.run.withSuccessHandler(setEmail).getUserEmail();
@@ -17,15 +19,12 @@
 >
   <div class="flex-initial">
     <div>
-      <a href="#/" class="hover:text-gray-300 mx-2 text-sm text-white"
-        >Sign up</a
-      >
-      <a href="#/home/" class="hover:text-gray-300 mx-2 text-sm text-white"
-        >Home</a
-      >
-      <a href="#/dashboard/" class="hover:text-gray-300 mx-2 text-sm text-white"
-        >Dashboard</a
-      >
+      <a href="#/" class="hover:text-gray-300 mx-2 text-sm text-white">Sign up</a>
+      <a href="#/home/" class="hover:text-gray-300 mx-2 text-sm text-white">Home</a>
+      <a href="#/dashboard/" class="hover:text-gray-300 mx-2 text-sm text-white">Dashboard</a>
+      {#if $userDetails.isAdmin && $userDetails.isAdmin !== undefined}
+        <a href="#/admin/" class="hover:text-gray-300 mx-2 text-sm text-white">Admin</a>
+      {/if}
     </div>
   </div>
   <div>

@@ -1,7 +1,18 @@
 <script>
-  import routes from "./routes";
   import Navigation from "./components/Navigation.svelte";
+  import Home from "./routes/Home.svelte";
+  import Signup from "./routes/Signup.svelte";
+  import Dashboard from "./routes/Dashboard.svelte";
+  import Admin from "./routes/admin.svelte";
+
   import Router from "svelte-spa-router";
+
+  const routes = {
+    "/": Signup,
+    "/home/": Home,
+    "/dashboard/": Dashboard,
+    "/admin/": Admin,
+  };
 </script>
 
 <Navigation />
