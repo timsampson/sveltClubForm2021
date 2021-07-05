@@ -13,8 +13,10 @@ module.exports = {
   theme: {
     extend: {},
   },
+    plugins: [
+    require("@tailwindcss/forms"),
+  ],
   variants: {
     extend: { backgroundColor: ['odd','even'] },
   },
-  plugins: [ require('@tailwindcss/forms')],
 }

@@ -8,9 +8,13 @@
   emailLoaded = false;
   onMount(() => {
     google.script.run.withSuccessHandler(setEmail).getUserEmail();
+    google.script.run.withSuccessHandler(updateUserDetails).getUserState();
   });
   function setEmail(email) {
     userEmail = email;
+  }
+  function updateUserDetails(updatedUserDetails) {
+    userDetails.set(updatedUserDetails);
   }
 </script>
 

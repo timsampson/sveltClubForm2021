@@ -8,9 +8,10 @@
   import Router from "svelte-spa-router";
 
   const routes = {
-    "/": Signup,
+    "/": Admin,
     "/home/": Home,
     "/dashboard/": Dashboard,
+    "/signup/": Signup,
     "/admin/": Admin,
   };
 </script>
