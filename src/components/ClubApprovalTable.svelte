@@ -1,34 +1,56 @@
 <script>
+  import { onMount } from "svelte";
   let records = [];
-  google.script.run.withSuccessHandler(showUserClubRecord).getClubsForApproval();
+  let approvals = [];
+  let approved = [];
+  onMount(() => {
+    google.script.run.withSuccessHandler(showUserClubRecord).getClubsForApproval();
+  });
+  updateApprovalList();
+  function updateApprovalList() {
+    google.script.run.withSuccessHandler(showUserClubRecord).getClubsForApproval();
+  }
   function showUserClubRecord(allUserApplicationRecords) {
     records = allUserApplicationRecords;
     console.table(records);
+    approvals = document.forms["approvalForm"].elements["approvals[]"];
   }
   function handleSubmit() {
-    console.log("button clicked");
+    for (var i = 0, len = approvals.length; i < len; i++) {
+      if (approvals[i].checked) {
+        approved.push(approvals[i].value);
+      }
+    }
+    console.table(approved);
+    google.script.run
+      .withSuccessHandler(clubApprovalResponse)
+      .updateApprovedClubApplications(approved);
+  }
+  function clubApprovalResponse() {
+    alert("Approvals Processed");
   }
 </script>
 
 <div class="mt-2 mx-auto p-4">
-  <h2 id="list-heading">Records for approval</h2>
-  <form on:submit|preventDefault={handleSubmit}>
+  <h2>Records for approval</h2>
+  <form on:submit|preventDefault={handleSubmit} id="approvalForm">
     <fieldset>
       <ul>
-        {#each records as record (record.id)}
-          <li class="todo">
-            <div class="stack-small">
-              <div class="c-cb">
-                <input type="checkbox" id="todo-{record.id}" checked={record.approved} />
-                <label for="todo-{record.id}" class="todo-label">
-                  `{record.name} in {record.homeroom}
-                  {record.grade} would like to join the {record.clubname} club.`
-                </label>
-              </div>
-            </div>
+        {#each records as record}
+          <li class="mt-2">
+            <label for={record.recordId}>
+              <input
+                type="checkbox"
+                name="approvals[]"
+                value={record.recordId}
+                id={record.recordId}
+              />
+              {record.name} in {record.homeroom}
+              {record.grade} would like to join the {record.appliedClubName} club.
+            </label>
           </li>
         {:else}
-          <li>Nothing to do here!</li>
+          <li>All Done!</li>
         {/each}
       </ul>
       <br />

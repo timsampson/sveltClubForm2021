@@ -28,9 +28,10 @@ const clubSheet = clubDB.getSheetByName("clubs");
 let clubValues = clubSheet.getDataRange().getValues();
 let clubRecords = sheetToObjArr(clubValues);
 function getClublist() {
+  clubValues = clubApplicationSheet.getDataRange().getValues();
+  clubRecords = sheetToObjArr(clubValues);
   return clubRecords;
 }
-
 const clubApplicationSheet = clubDB.getSheetByName("club_application");
 let clubApplicationValues = clubApplicationSheet.getDataRange().getDisplayValues();
 let clubApplicationRecords = sheetToObjArr(clubApplicationValues);
@@ -59,9 +60,9 @@ function getClubApplicationData() {
   return clubApplicationValues.slice();
 }
 function getClubApplicationRecords() {
-  clubApplicationValues = clubSheet.getDataRange().getValues();
-  let clubRecords = sheetToObjArr(clubApplicationValues);
-  return clubRecords;
+  clubApplicationValues = clubApplicationSheet.getDataRange().getDisplayValues();
+  clubApplicationRecords = sheetToObjArr(clubApplicationValues);
+  return clubApplicationRecords;
 }
 function getClubDetails(clubId: string | number) {
   let filteredHRDetails = clubRecords.filter(function (club) {

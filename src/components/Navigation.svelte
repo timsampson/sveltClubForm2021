@@ -23,7 +23,7 @@
 >
   <div class="flex-initial">
     <div>
-      <a href="#/" class="hover:text-gray-300 mx-2 text-sm text-white">Sign up</a>
+      <a href="#/signup" class="hover:text-gray-300 mx-2 text-sm text-white">Sign up</a>
       <a href="#/home/" class="hover:text-gray-300 mx-2 text-sm text-white">Home</a>
       <a href="#/dashboard/" class="hover:text-gray-300 mx-2 text-sm text-white">Dashboard</a>
       {#if $userDetails.isAdmin && $userDetails.isAdmin !== undefined}
