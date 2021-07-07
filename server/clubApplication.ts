@@ -1,20 +1,16 @@
-function testsetrecord() {
-  setRecordClubEntry(2).then((value) => Logger.log(value));
-}
-
-function clubApplicationId() {
-  let lastRecordRow = clubApplicationSheet.getLastRow() + 1;
+function applicationId(sheet: GoogleAppsScript.Spreadsheet.Sheet) {
+  let lastRecordRow = sheet.getLastRow() + 1;
   let formApplicationDate = new Date();
   let year = formApplicationDate.getFullYear();
   let day = formApplicationDate.getDate();
   let recordId = "id" + year + day + lastRecordRow;
   return recordId;
 }
-async function setRecordClubEntry(clubId: string | number) {
+async function setRecordClubApplicationEntry(clubId: string | number) {
   let clubDetails = await getClubDetails(clubId);
   let userState = await getUserState();
   let formStatus = await getFormStatus();
-  let clubRecordId = clubApplicationId();
+  let clubRecordId = applicationId(clubApplicationSheet);
 
   let application = {
     email: getUserEmail(),
@@ -41,52 +37,44 @@ async function setRecordClubEntry(clubId: string | number) {
     currentClubId: undefined,
     isModerator: undefined,
     canSubmit: userState.canSubmit,
-    isApproved: false
+    isApproved: false,
+    message: "",
   };
   // check to see if the club is full
   // approval process
   if (application.hasCapacity) {
     if (application.formStatus == "submit" && !application.isInClub) {
       application.formStatus = "approved";
-      application.processed, application.isApproved = true;
+      application.processed, (application.isApproved = true);
+      application.message = `Your application for the ${application.appliedClubName} has been approved.`;
     } else if (application.formStatus == "submit" && application.isInClub) {
       application.formStatus = "pending";
-      application.processed, application.isApproved = false;
+      application.processed, (application.isApproved = false);
+      application.message = `Your application for the ${application.appliedClubName} has not been approved. 
+        You currently are in a club, and changes are not currently allowed. `;
     } else if (application.formStatus == "edit") {
       application.formStatus = "approved";
-      application.processed, application.isApproved = true;
+      application.processed, (application.isApproved = true);
+      application.message = `Your application for the ${application.appliedClubName} has been approved.`;
     } else if (application.formStatus == "approval") {
       application.formStatus = "pending";
-       application.processed, application.isApproved = false;
+      application.processed, (application.isApproved = false);
+      application.message = `Your application for the ${application.appliedClubName} is pending approval `;
     } else {
       application.formStatus = "rejected";
-       application.processed, application.isApproved = false;
+      application.processed, (application.isApproved = false);
+      application.message = `Your application for the ${application.appliedClubName} has not been approved.  
+        Please contact the club administrator.`;
     }
   } else {
     application.formStatus = "rejected";
-     application.processed, application.isApproved = false;
+    application.processed, (application.isApproved = false);
+    application.message = `Your application for the ${application.appliedClubName} has not been approved.  
+        Please contact the club administrator.`;
   }
   sendapplicationEmail(application);
+  logEnrollment(application);
   logClubApplication(application);
-  if (application.formStatus == "approved" && !application.isInClub) {
-    // send welcome email  to the club
-    // append log to the log record
-    // append enrollment to the enrollment record
-  } else if (application.formStatus == "approved" && application.isInClub) {
-    // send welcome email to the club
-    // append log to the log record
-    // *edit* enrollment to the enrollment record
-  } else if (application.formStatus == "pending") {
-    // send email club application is pending
-    // append log to the log record
-  }
-  // write the log
-
-  // if not found, append it
-
-  // if found, update it
-  // send email with confirmation the application has been processed
-
   return application;
 }
 function logClubApplication(application) {
@@ -118,22 +106,7 @@ function logClubApplication(application) {
     application.userRole,
     application.isStudent,
     application.isModerator,
+    application.message
   ];
   clubApplicationSheet.appendRow(applicationLogRecord);
-}
-function sendapplicationEmail(application) {
-  const htmlBody = HtmlService.createTemplateFromFile("welcome-mail");
-  htmlBody.stuName = application.name;
-  htmlBody.clubName = application.appliedClubName;
-  htmlBody.clubDetails = application.appliedClubDetails;
-  htmlBody.clubModerator = application.appliedclubModerator;
-  const emailHtml = htmlBody.evaluate().getContent();
-  const email = application.email;
-  let welcomeMessage = `Welcome to the ${application.appliedClubName} club!`;
-  MailApp.sendEmail({
-    // cc: ccEmail,
-    htmlBody: emailHtml,
-    subject: welcomeMessage,
-    to: email,
-  });
 }

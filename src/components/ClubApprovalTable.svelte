@@ -13,11 +13,9 @@
   function showUserClubRecord(allUserApplicationRecords) {
     records = allUserApplicationRecords;
     console.table(records);
-    if (records.length > 0) {
-      approvals = document.forms["approvalForm"].elements["approvals[]"];
-    }
   }
   function handleSubmit() {
+    approvals = document.forms["approvalForm"].elements["approvals[]"];
     for (var i = 0, len = approvals.length; i < len; i++) {
       if (approvals[i].checked) {
         approved.push(approvals[i].value);
@@ -48,7 +46,7 @@
                   value={record.recordId}
                   id={record.recordId}
                 />
-                {record.name} in {record.homeroom}
+                {record.name} in homeroom {record.homeroom} grade
                 {record.grade} would like to join the {record.appliedClubName} club.
               </label>
             </li>

@@ -26,30 +26,32 @@
     google.script.run.withSuccessHandler(setClubSignupList).getClubsFilteredByLevel();
     google.script.run.withSuccessHandler(updateUserDetails).getUserState();
   });
+  function closeTheForm() {
+    closeTheForm();
+  }
   function handleSubmit() {
     $userDetails.formSubmitted = true;
-    formClosed = true;
-    google.script.run.withSuccessHandler(clubSubmissionResponse).setRecordClubEntry(selected.id);
+    google.script.run
+      .withSuccessHandler(clubSubmissionResponse)
+      .setRecordClubApplicationEntry(selected.id);
     notice.set(`Your application for the ${selected.name} club is being processed. `);
-    resetAlerts();
-    alertInfo.set(true);
+    closeTheForm();
   }
   function updateFormMessage() {
     if ($userDetails.formSubmitted) {
       notice.set(
         `You have submitted an application for the ${selected.name} club. Please check your email for confirmation.`
       );
+      closeTheForm();
     } else if (!$userDetails.canSubmit) {
-      formClosed = true;
+      closeTheForm();
       if ($userDetails.isInClub) {
         notice.set(
           `You are already in the ${$userDetails.currentClubName} club and changes are not currently permitted.`
         );
       }
       if ($userDetails.hasPendingClub) {
-        notice.set(
-          `You have a pending approval for ${$userDetails.pendingClubName}. The form is currently closed.`
-        );
+        notice.set(`You have a pending approval for ${$userDetails.pendingClubName}.`);
       }
     } else if ($userDetails.formStatus === "view" || $userDetails.formStatus === "closed") {
       formClosed = true;
@@ -58,17 +60,17 @@
       );
     } else if ($userDetails.formStatus === "submit") {
       if (!$userDetails.isInClub) {
-        formClosed = true;
+        formClosed = false;
+        notice.set(`Please select a club from the list.`);
+      } else {
         notice.set(
           `You are already enrolled in the  ${$userDetails.currentClubName}. The form is currently closed.`
         );
-      } else {
-        notice.set(`Please select a club from the list.`);
-        formClosed = false;
+        closeTheForm();
       }
     } else if ($userDetails.formStatus === "approval") {
       if (!$userDetails.isInClub) {
-        formClosed = true;
+        closeTheForm();
       } else {
         notice.set(`Please select a club from the list.`);
         formClosed = false;
@@ -84,7 +86,7 @@
         notice.set(`Please select a club from the list.`);
       }
     } else {
-      formClosed = true;
+      closeTheForm();
       notice.set(`Please contact the club administrator.`);
     }
   }
