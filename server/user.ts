@@ -33,8 +33,7 @@ async function getUserState() {
     userState.currentClubName = userClubDetails.club_name;
     userState.currentClubId = userClubDetails.club_id;
     userState.isInClub = true;
-  }
-  else {
+  } else {
     userState.isInClub = false;
   }
   let pendingClub = getPendingClubsForUser();
@@ -45,8 +44,10 @@ async function getUserState() {
     userState.hasPendingClub = false;
   }
   userState.canSubmit =
-    ((userState.formStatus === "submit" && !userState.isInClub) &&
-    (userState.formStatus === "submit" && !userState.hasPendingClub)) ||
+    (userState.formStatus === "submit" &&
+      !userState.isInClub &&
+      userState.formStatus === "submit" &&
+      !userState.hasPendingClub) ||
     userState.formStatus === "approval" ||
     userState.formStatus === "edit";
   return userState;
@@ -90,7 +91,7 @@ function getClubsFilteredByLevel() {
   // need available clubs
   // filter the availabe clubs by matches with student details.
   let homeroomDetails = getUserHRDetails();
-  let allclubs = getClublist();
+  let allclubs = getClubRecords();
   function isMatch(levelOptions) {
     let isMatch = false;
     levelOptions.forEach((element) => {
@@ -107,16 +108,11 @@ function getClubsFilteredByLevel() {
   });
   return clubsByLevel;
 }
-function getAppliedClubsForUser() {
-  let filteredClubEnrollmentRecords = clubApplicationRecords.filter(function (application) {
-    return application.email == getUserEmail();
-  });
-  return filteredClubEnrollmentRecords;
-}
+
 function currentUser(value: { name: string }) {
   return value.name == getUserEmail();
 }
-function checkIsAdmin(){
+function checkIsAdmin() {
   let filterdClubAdminsRecords = clubAdminsRecords.filter(function (admins) {
     return admins.email === getUserEmail();
   });

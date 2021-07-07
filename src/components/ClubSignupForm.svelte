@@ -105,15 +105,21 @@
     approvalResponse = response;
     console.table(approvalResponse);
     resetAlerts();
-    if (response.processed) {
-      notice.set(`Your response has been received for the ${response.clubName} club.`);
+    if (response.processed && response.status == "approved") {
+      notice.set(
+        `Your response has been received and approved for the ${response.appliedClubName} club.`
+      );
       alertSuccess.set(true);
-    }
-    if (!response.hasCapacity) {
+    } else if (!response.hasCapacity) {
       notice.set(`{$notice} Sorry the club you've chosen is full.`);
       alertDanger.set(true);
+    } else if (response.status == "pending") {
+      notice.set(
+        `Your response has been received and is pending approval for the ${response.appliedClubName} club.`
+      );
+      alertDanger.set(true);
     } else {
-      notice.set(`${$notice} Please check your email for confimation of enrollment.`);
+      notice.set(`Please check your email for confimation of enrollment.`);
       alertDanger.set(true);
     }
   }
@@ -121,7 +127,7 @@
     updateFormMessage();
     if (!formClosed) {
       alertSuccess.set(true);
-      notice.set(`${$notice} You have selected the ${selected.name} club.`);
+      notice.set(`You have selected the ${selected.name} club.`);
       $alertPrimary = true;
     }
   }

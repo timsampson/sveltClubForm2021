@@ -1,6 +1,6 @@
 <script>
   import { fade } from "svelte/transition";
-  google.script.run.withSuccessHandler(showUserClubRecord).getAppliedClubsForUser();
+  google.script.run.withSuccessHandler(showUserClubRecord).getClubApplicationRecordsForUser();
   export let titles = [
     "name",
     "moderator",
@@ -21,7 +21,7 @@
     {#if records.length > 0}
       Your Application Record
     {:else}
-      Please wait for the available clubs to load.
+      Please wait for your Application Record to load.
     {/if}
   </h1>
   {#if records.length > 0}
@@ -40,12 +40,12 @@
         {#each records as record}
           <tr class="odd:bg-gray-200">
             <td class="min-w-26 px-2 border border-blue-800">{record.name}</td>
-            <td class="min-w-26 px-2 border border-blue-800">{record.moderator}</td>
-            <td class="min-w-26 px-2 border border-blue-800">{record.description}</td>
-            <td class="min-w-26 px-2 border border-blue-800">{record.clubid}</td>
-            <td class="min-w-26 px-2 border border-blue-800">{record.clubname}</td>
-            <td class="min-w-26 px-2 border border-blue-800">{record.approved}</td>
-            <td class="min-w-26 px-2 border border-blue-800">{record.status}</td>
+            <td class="min-w-26 px-2 border border-blue-800">{record.appliedclubModerator}</td>
+            <td class="min-w-26 px-2 border border-blue-800">{record.appliedClubDetails}</td>
+            <td class="min-w-26 px-2 border border-blue-800">{record.appliedClubId}</td>
+            <td class="min-w-26 px-2 border border-blue-800">{record.appliedClubName}</td>
+            <td class="min-w-26 px-2 border border-blue-800">{record.formStatus}</td>
+            <td class="min-w-26 px-2 border border-blue-800">{record.isApproved}</td>
           </tr>
         {/each}
       </tbody>
