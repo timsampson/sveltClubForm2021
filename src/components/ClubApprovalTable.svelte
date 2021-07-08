@@ -38,7 +38,7 @@
       <fieldset>
         <ul>
           {#each records as record}
-            <li class="ml-2">
+            <li class="ml-2 py-1 ">
               <input
                 class="mr-2 border-2 border-blue-800 rounded"
                 type="checkbox"
@@ -46,9 +46,14 @@
                 value={record.recordId}
                 id={record.recordId}
               />
-              <label for={record.recordId}>
+              <label
+                class:text-red-500={!record.hasCapacity}
+                class:italic={!record.hasCapacity}
+                for={record.recordId}
+              >
                 {record.name} in homeroom {record.homeroom} grade
-                {record.grade} would like to join the {record.hasCapacity ? "" : "full"}
+                {record.grade} would like to join the
+                <strong>{record.hasCapacity ? "" : "full"}</strong>
                 {record.appliedClubName} club.
               </label>
             </li>
