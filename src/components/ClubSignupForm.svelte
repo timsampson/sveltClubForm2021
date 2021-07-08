@@ -27,7 +27,9 @@
     google.script.run.withSuccessHandler(updateUserDetails).getUserState();
   });
   function closeTheForm() {
-    closeTheForm();
+    formClosed = true;
+    resetAlerts();
+    alertInfo.set(true);
   }
   function handleSubmit() {
     $userDetails.formSubmitted = true;

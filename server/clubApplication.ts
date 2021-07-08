@@ -32,9 +32,9 @@ async function setRecordClubApplicationEntry(clubId: string | number) {
     homeroom: userState.homeroom,
     userRole: undefined,
     isStudent: userState.isStudent,
-    pendingClubName: undefined,
+    pendingClubName: userState.pendingClubName,
     currentClubName: userState.currentClubName,
-    currentClubId: undefined,
+    currentClubId: userState.currentClubId,
     isModerator: undefined,
     canSubmit: userState.canSubmit,
     isApproved: false,
@@ -46,6 +46,7 @@ async function setRecordClubApplicationEntry(clubId: string | number) {
     if (application.formStatus == "submit" && !application.isInClub) {
       application.formStatus = "approved";
       application.processed, (application.isApproved = true);
+      logEnrollment(application);
       application.message = `Your application for the ${application.appliedClubName} has been approved.`;
     } else if (application.formStatus == "submit" && application.isInClub) {
       application.formStatus = "pending";
@@ -54,6 +55,7 @@ async function setRecordClubApplicationEntry(clubId: string | number) {
         You currently are in a club, and changes are not currently allowed. `;
     } else if (application.formStatus == "edit") {
       application.formStatus = "approved";
+      logEnrollment(application);
       application.processed, (application.isApproved = true);
       application.message = `Your application for the ${application.appliedClubName} has been approved.`;
     } else if (application.formStatus == "approval") {
@@ -73,7 +75,6 @@ async function setRecordClubApplicationEntry(clubId: string | number) {
         Please contact the club administrator.`;
   }
   sendapplicationEmail(application);
-  logEnrollment(application);
   logClubApplication(application);
   return application;
 }

@@ -7,7 +7,7 @@ function sendapplicationEmail(application) {
   htmlBody.message = application.message;
   const emailHtml = htmlBody.evaluate().getContent();
   const email = application.email;
-  let welcomeMessage = `Welcome to the ${application.appliedClubName} club!`;
+  let welcomeMessage = `Notice for your application to the ${application.appliedClubName} club!`;
   MailApp.sendEmail({
     // cc: ccEmail,
     htmlBody: emailHtml,

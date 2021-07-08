@@ -10,9 +10,9 @@ function logEnrollment(application){
     application.appliedClubId,
     application.appliedClubName,
     application.appliedclubModerator,
-    application.appliedClubDescription,
+    application.appliedClubDetails,
   ];
-  let recordId = applicationId(clubApplicationSheet);
+  let recordId = applicationId(clubEnrollmentSheet);
   logRecord.unshift(recordId);
-  clubApplicationSheet.appendRow(logRecord);
+  clubEnrollmentSheet.appendRow(logRecord);
 }
