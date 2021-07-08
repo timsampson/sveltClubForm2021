@@ -46,7 +46,7 @@ async function setRecordClubApplicationEntry(clubId: string | number) {
     if (application.formStatus == "submit" && !application.isInClub) {
       application.formStatus = "approved";
       application.processed, (application.isApproved = true);
-      logEnrollment(application);
+      processEnrollment(application);
       application.message = `Your application for the ${application.appliedClubName} has been approved.`;
     } else if (application.formStatus == "submit" && application.isInClub) {
       application.formStatus = "pending";
@@ -55,9 +55,10 @@ async function setRecordClubApplicationEntry(clubId: string | number) {
         You currently are in a club, and changes are not currently allowed. `;
     } else if (application.formStatus == "edit") {
       application.formStatus = "approved";
-      logEnrollment(application);
+      processEnrollment(application);
       application.processed, (application.isApproved = true);
       application.message = `Your application for the ${application.appliedClubName} has been approved.`;
+      
     } else if (application.formStatus == "approval") {
       application.formStatus = "pending";
       application.processed, (application.isApproved = false);
@@ -78,36 +79,4 @@ async function setRecordClubApplicationEntry(clubId: string | number) {
   logClubApplication(application);
   return application;
 }
-function logClubApplication(application) {
-  let formSubmissionDate = new Date();
-  let applicationLogRecord = [
-    application.recordId,
-    formSubmissionDate,
-    application.email,
-    application.name,
-    application.school,
-    application.grade,
-    application.homeroom,
-    application.appliedClubId,
-    application.appliedClubName,
-    application.appliedclubModerator,
-    application.appliedClubDetails,
-    application.hasCapacity,
-    application.canSubmit,
-    application.isApproved,
-    application.formStatus,
-    application.received,
-    application.hasPendingClub,
-    application.pendingClubName,
-    application.isInClub,
-    application.currentClubId,
-    application.currentClubName,
-    application.applicationStatus,
-    application.processed,
-    application.userRole,
-    application.isStudent,
-    application.isModerator,
-    application.message
-  ];
-  clubApplicationSheet.appendRow(applicationLogRecord);
-}
+

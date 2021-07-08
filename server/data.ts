@@ -28,22 +28,28 @@ const clubSheet = clubDB.getSheetByName("clubs");
 let clubValues = clubSheet.getDataRange().getValues();
 let clubRecords = sheetToObjArr(clubValues);
 function getClubRecords() {
-    clubValues = clubSheet.getDataRange().getValues();
-    clubRecords = sheetToObjArr(clubValues);
-    return clubRecords;
+  clubValues = clubSheet.getDataRange().getValues();
+  clubRecords = sheetToObjArr(clubValues);
+  return clubRecords;
 }
 const clubApplicationSheet = clubDB.getSheetByName("club_application");
 let clubApplicationValues = clubApplicationSheet.getDataRange().getDisplayValues();
 let clubApplicationRecords = sheetToObjArr(clubApplicationValues);
-async function getApplicationRecords() {
-    clubApplicationValues = clubApplicationSheet.getDataRange().getDisplayValues();
-    clubApplicationRecords = sheetToObjArr(clubValues);
-    return clubApplicationRecords;
+
+async function getClubApplicationRecords() {
+  clubApplicationValues = clubApplicationSheet.getDataRange().getDisplayValues();
+  clubApplicationRecords = sheetToObjArr(clubApplicationValues);
+  return clubApplicationRecords;
 }
 const clubEnrollmentSheet = clubDB.getSheetByName("club_enrollment");
 let clubEnrollmentValues = clubEnrollmentSheet.getDataRange().getDisplayValues();
 let clubEnrollmentRecords = sheetToObjArr(clubEnrollmentValues);
 
+async function getClubEnrollmentRecords() {
+  clubEnrollmentValues = clubEnrollmentSheet.getDataRange().getDisplayValues();
+  clubEnrollmentRecords = sheetToObjArr(clubEnrollmentValues);
+  return clubEnrollmentRecords;
+}
 const moderatorSheet = clubDB.getSheetByName("moderators");
 let moderatorValues = moderatorSheet.getDataRange().getValues();
 let moderatorRecords = sheetToObjArr(moderatorValues);
@@ -63,23 +69,16 @@ function getFormStatus() {
 function getClubApplicationData() {
   return clubApplicationValues.slice();
 }
-async function getClubApplicationRecords() {
-  clubApplicationValues = clubApplicationSheet.getDataRange().getDisplayValues();
-  clubApplicationRecords = sheetToObjArr(clubApplicationValues);
-  return clubApplicationRecords;
-}
-async function getClubApplicationRecordsForUser() {
-  clubApplicationRecords = await getClubApplicationRecords();
-  let filteredClubEnrollmentRecords = clubApplicationRecords.filter(function (application) {
-    return application.email == getUserEmail();
-  });
-  return filteredClubEnrollmentRecords;
-}
+
 function getClubDetails(clubId: string | number) {
   let filteredHRDetails = clubRecords.filter(function (club) {
     return club.id == clubId;
   });
   return filteredHRDetails[0];
+}
+function clubHasCapacity(clubId){
+    let clubDetails = getClubDetails(clubId);
+    return clubDetails.enrolled < clubDetails.capacity
 }
 function sheetToObjArr(data: any[]) {
   // get key values from first row or original array

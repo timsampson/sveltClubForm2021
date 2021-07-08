@@ -67,7 +67,20 @@ function getStudentInfo() {
   });
   return filteredStudentInfo[0];
 }
-
+async function getClubApplicationRecordsForUser() {
+  clubApplicationRecords = await getClubApplicationRecords();
+  let filteredClubEnrollmentRecords = clubApplicationRecords.filter(function (application) {
+    return application.email == getUserEmail();
+  });
+  return filteredClubEnrollmentRecords;
+}
+async function getClubEnrollmentRecordsForUser() {
+  clubApplicationRecords = await getClubEnrollmentRecords();
+  let filteredClubEnrollmentRecords = clubApplicationRecords.filter(function (application) {
+    return application.email == getUserEmail();
+  });
+  return filteredClubEnrollmentRecords;
+}
 async function getUserCurrentClubDetails() {
   let currentClubDetails = clubEnrollmentRecords.filter(function (student) {
     return student.email == getUserEmail();

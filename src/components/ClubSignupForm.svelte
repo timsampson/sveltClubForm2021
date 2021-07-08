@@ -158,9 +158,9 @@
     </div>
     <button
       type="submit"
-      class="inline-flex items-center my-4 py-2 px-4 text-indigo-100 transition-colors duration-150 bg-indigo-400 rounded-lg focus:shadow-outline disabled:opacity-50"
-      class:bg-indigo-600={selected.name.length > 1 && !userDetails.formSubmitted && !formClosed}
-      class:bg-indigo-400={selected.name.length < 1 || userDetails.formSubmitted || formClosed}
+      class="inline-flex items-center my-4 py-2 px-4 font-bold text-white transition-colors duration-150 hover:bg-blue-700  rounded-lg focus:shadow-outline disabled:opacity-50"
+      class:bg-blue-500={selected.name.length > 1 && !userDetails.formSubmitted && !formClosed}
+      class:bg-blue-300={selected.name.length < 1 || userDetails.formSubmitted || formClosed}
       disabled={!clubsLoaded ||
         formClosed ||
         userDetails.formSubmitted ||

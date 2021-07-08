@@ -24,7 +24,7 @@
     console.table(approved);
     google.script.run
       .withSuccessHandler(clubApprovalResponse)
-      .updateApprovedClubApplications(approved);
+      .processApprovedClubApplications(approved);
   }
   function clubApprovalResponse() {
     alert("Approvals Processed");
@@ -38,22 +38,29 @@
       <fieldset>
         <ul>
           {#each records as record}
-            <li class="mt-2">
+            <li class="ml-2">
+              <input
+                class="mr-2 border-2 border-blue-800 rounded"
+                type="checkbox"
+                name="approvals[]"
+                value={record.recordId}
+                id={record.recordId}
+              />
               <label for={record.recordId}>
-                <input
-                  type="checkbox"
-                  name="approvals[]"
-                  value={record.recordId}
-                  id={record.recordId}
-                />
                 {record.name} in homeroom {record.homeroom} grade
-                {record.grade} would like to join the {record.appliedClubName} club.
+                {record.grade} would like to join the {record.hasCapacity ? "" : "full"}
+                {record.appliedClubName} club.
               </label>
             </li>
           {/each}
         </ul>
         <br />
-        <input type="submit" value="Submit now" />
+        <button
+          type="submit"
+          class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg"
+        >
+          <span>Submit</span>
+        </button>
       </fieldset>
     </form>
   {:else}

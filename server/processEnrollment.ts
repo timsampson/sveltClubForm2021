@@ -1,13 +1,18 @@
-async function updateApprovedClubApplications(approved) {
-  // loop through the approved clubs ids
-  // for each id, get record,
-  approved.forEach((approvalId) => processApproval(approvalId));
+// if the application has a current club and if form status is edit, changeCurrentClub 
 
-  return approved;
+function processEnrollment(application){
+    if (application.isInClub && application.formStatus === 'edit'){
+      
+    }
 }
-async function processApproval(approvalId) {
+
+async function processApprovedClubApplications(approvedApplications) {
+  approvedApplications.forEach((approvalId: string) => processApprovedClubApplication(approvalId));
+  return true;
+}
+async function processApprovedClubApplication(approvalId) {
   let updatedClubDetails = await logApproval(approvalId);
-  await updateOriginalEntry(approvalId);
+  await updateOriginalApplicationEntry(approvalId);
   await changeCurrentClub(updatedClubDetails);
 }
 
@@ -19,16 +24,16 @@ async function logApproval(approvalId) {
     return application.recordId == approvalId;
   });
   let filteredClubApplicationRecord = filteredClubApplicationRow[0];
-  filteredClubApplicationRecord.recordId = clubApplicationId();
+  filteredClubApplicationRecord.recordId = applicationId(clubApplicationSheet);
   filteredClubApplicationRecord.processed = true;
   filteredClubApplicationRecord.isApproved = true;
   filteredClubApplicationRecord.formStatus = "approved";
   logClubApplication(filteredClubApplicationRecord);
   return filteredClubApplicationRecord;
 }
-async function updateOriginalEntry(approval) {
-  Logger.log(approval);
-  let id = approval;
+async function updateOriginalApplicationEntry(approvalId) {
+  Logger.log(approvalId);
+  let id = approvalId;
   // Logger.log(`id: ${id}`)
   let rowIndex = -1;
   let colIndex = clubApplicationValues[0].indexOf("processed");
