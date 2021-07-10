@@ -1,74 +1,40 @@
 <script>
   import { onMount } from "svelte";
   let records = [];
-  let approvals = [];
-  let approved = [];
   onMount(() => {
-    google.script.run.withSuccessHandler(showUserClubRecord).getClubsForApproval();
+    google.script.run.withSuccessHandler(showApprovalRecords).getClubsForApproval();
   });
-  updateApprovalList();
-  function updateApprovalList() {
-    google.script.run.withSuccessHandler(showUserClubRecord).getClubsForApproval();
-  }
-  function showUserClubRecord(allUserApplicationRecords) {
+  function showApprovalRecords(allUserApplicationRecords) {
     records = allUserApplicationRecords;
-    console.table(records);
   }
-  function handleSubmit() {
-    approvals = document.forms["approvalForm"].elements["approvals[]"];
-    for (var i = 0, len = approvals.length; i < len; i++) {
-      if (approvals[i].checked) {
-        approved.push(approvals[i].value);
-      }
-    }
-    console.table(approved);
-    google.script.run
-      .withSuccessHandler(clubApprovalResponse)
-      .processApprovedClubApplications(approved);
-  }
-  function clubApprovalResponse() {
-    alert("Approvals Processed");
+
+  function handleClick() {
+    records = records.slice(1);
   }
 </script>
 
 <div class="mt-2 mx-auto p-4">
-  <h2>Records for approval</h2>
-  {#if records.length > 0}
-    <form on:submit|preventDefault={handleSubmit} id="approvalForm">
-      <fieldset>
-        <ul>
-          {#each records as record}
-            <li class="ml-2 py-1 ">
-              <input
-                class="mr-2 border-2 border-blue-800 rounded"
-                type="checkbox"
-                name="approvals[]"
-                value={record.recordId}
-                id={record.recordId}
-              />
-              <label
-                class:text-red-500={!record.hasCapacity}
-                class:italic={!record.hasCapacity}
-                for={record.recordId}
-              >
-                {record.name} in homeroom {record.homeroom} grade
-                {record.grade} would like to join the
-                <strong>{record.hasCapacity ? "" : "full"}</strong>
-                {record.appliedClubName} club.
-              </label>
-            </li>
-          {/each}
-        </ul>
-        <br />
-        <button
-          type="submit"
-          class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg"
+  <ul>
+    {#each records as record}
+      <li>
+        <input type="checkbox" id={record.recordId} name="approvals[]" />
+        <label for={record.recordId} class="ml-2 py-1 "
+          >Record for {record.name} apply to {record.appliedClubName}</label
         >
-          <span>Submit</span>
-        </button>
-      </fieldset>
-    </form>
-  {:else}
-    <p>No records needing approval</p>
-  {/if}
+      </li>
+    {/each}
+  </ul>
+  <button
+    on:click={handleClick}
+    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg inline-flex items-center mr-2"
+  >
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+      <path
+        fill-rule="evenodd"
+        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+        clip-rule="evenodd"
+      />
+    </svg>
+    <span class="ml-2">Remove first thing </span>
+  </button>
 </div>
