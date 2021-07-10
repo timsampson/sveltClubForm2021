@@ -1,6 +1,8 @@
 <script>
   import { onMount } from "svelte";
   let records = [];
+  let approvals = [];
+  let approved = [];
   onMount(() => {
     google.script.run.withSuccessHandler(showApprovalRecords).getClubsForApproval();
   });
@@ -9,7 +11,18 @@
   }
 
   function handleClick() {
-    records = records.slice(1);
+    approvals = document.getElementsByName("approvals");
+    console.table(approvals);
+    console.log(approvals.length);
+    for (var i = approvals.length - 1; i >= 0; i--) {
+      console.log(`approvals ${i} is checked: ${approvals[i].checked}`);
+      if (approvals[i].checked) {
+        console.log(records[i]);
+        console.log(approvals[i]);
+        records.splice(i, 1);
+      }
+      records = records;
+    }
   }
 </script>
 
@@ -17,7 +30,7 @@
   <ul>
     {#each records as record}
       <li>
-        <input type="checkbox" id={record.recordId} name="approvals[]" />
+        <input type="checkbox" id={record.recordId} name="approvals" />
         <label for={record.recordId} class="ml-2 py-1 "
           >Record for {record.name} apply to {record.appliedClubName}</label
         >
@@ -26,7 +39,7 @@
   </ul>
   <button
     on:click={handleClick}
-    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg inline-flex items-center mr-2"
+    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg inline-flex items-center mt-4"
   >
     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
       <path
