@@ -20,9 +20,13 @@
         console.log(records[i]);
         console.log(approvals[i]);
         records.splice(i, 1);
+        approved.push(records[i]);
+        approvals[i].checked = false;
       }
       records = records;
     }
+    console.log("approved");
+    console.table(approved);
   }
 </script>
 
