@@ -3,30 +3,41 @@
   let records = [];
   let approvals = [];
   let approved = [];
+  let rejects = [];
+  let rejected = [];
   onMount(() => {
     google.script.run.withSuccessHandler(showApprovalRecords).getClubsForApproval();
   });
   function showApprovalRecords(allUserApplicationRecords) {
     records = allUserApplicationRecords;
   }
-
   function handleClick() {
     approvals = document.getElementsByName("approvals");
-    console.table(approvals);
-    console.log(approvals.length);
-    for (var i = approvals.length - 1; i >= 0; i--) {
-      console.log(`approvals ${i} is checked: ${approvals[i].checked}`);
-      if (approvals[i].checked) {
-        console.log(records[i]);
-        console.log(approvals[i]);
-        records.splice(i, 1);
-        approved.push(records[i]);
-        approvals[i].checked = false;
+    rejects = document.getElementsByName("rejects");
+    if (approvals.length > 0 || rejects.length > 0) {
+      for (var i = records.length - 1; i >= 0; i--) {
+        if (!(approvals[i].checked && rejects[i].checked)) {
+          if (approvals[i].checked || rejects[i].checked) {
+            if (approvals[i].checked) {
+              approved.push(records[i]);
+              approvals[i].checked = false;
+            }
+            if (rejects[i].checked) {
+              rejected.push(records[i]);
+              rejects[i].checked = false;
+            }
+            records.splice(i, 1);
+            records = records;
+          }
+        }
       }
-      records = records;
     }
     console.log("approved");
     console.table(approved);
+    console.log("rejected");
+    console.table(rejected);
+    console.log("records");
+    console.table(records);
   }
 </script>
 
@@ -34,9 +45,21 @@
   <ul>
     {#each records as record}
       <li>
-        <input type="checkbox" id={record.recordId} name="approvals" />
-        <label for={record.recordId} class="ml-2 py-1 "
-          >Record for {record.name} apply to {record.appliedClubName}</label
+        <input
+          type="checkbox"
+          class="{record.recordId} text-green-500 rounded border border-green-500 focus:ring-green-500 mr-2"
+          name="approvals"
+        />
+        <input
+          type="checkbox"
+          class="{record.recordId} text-red-500 rounded border-red-500 focus:ring-red-500"
+          name="rejects"
+        />
+        <label for={record.recordId} class="ml-2 py-1 " class:italic={!record.hasCapacity}
+          >{record.name} in homeroom {record.homeroom} grade
+          {record.grade} would like to join the
+          <strong class="text-red-500">{record.hasCapacity ? "" : "full"}</strong>
+          {record.appliedClubName} club.</label
         >
       </li>
     {/each}
@@ -52,6 +75,6 @@
         clip-rule="evenodd"
       />
     </svg>
-    <span class="ml-2">Remove first thing </span>
+    <span class="ml-2">Submit</span>
   </button>
 </div>
