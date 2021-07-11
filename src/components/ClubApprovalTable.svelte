@@ -29,33 +29,44 @@
             records.splice(i, 1);
             records = records;
           }
+        } else {
+          approvals[i].checked = false;
+          rejects[i].checked = false;
+          // tbd add notice that it wasn't processed because both were selected.
         }
       }
     }
     console.log("approved");
-    console.table(approved);
+    approved.forEach((app) => console.log(app.recordId));
     console.log("rejected");
-    console.table(rejected);
+    rejected.forEach((app) => console.log(app.recordId));
     console.log("records");
     console.table(records);
   }
 </script>
 
 <div class="mt-2 mx-auto p-4">
+  <h1 class="text-2xl text-blue-800">Records for Processing</h1>
+  <p class="my-2 p-2 border border-blue-800 rounded-md ">
+    Please select the <span class="text-red-600">red checkbox </span>to reject the application, or
+    the <span class="text-green-700">green checkbox</span> to approve an application. If an applied
+    club is full, the entry will be in italics and have include the text:
+    <strong class="text-red-500 italic">full</strong>
+  </p>
   <ul>
     {#each records as record}
-      <li>
+      <li class="border-b-2 border-blue-200 pt-2 pb-1">
         <input
           type="checkbox"
-          class="{record.recordId} text-green-500 rounded border border-green-500 focus:ring-green-500 mr-2"
+          class="{record.recordId} text-green-500 rounded border-2 border-green-500 focus:ring-green-500 mr-2"
           name="approvals"
         />
         <input
           type="checkbox"
-          class="{record.recordId} text-red-500 rounded border-red-500 focus:ring-red-500"
+          class="{record.recordId} text-red-500 border-2 rounded border-red-500 focus:ring-red-500"
           name="rejects"
         />
-        <label for={record.recordId} class="ml-2 py-1 " class:italic={!record.hasCapacity}
+        <label for={record.recordId} class="ml-2 py-1 text-sm" class:italic={!record.hasCapacity}
           >{record.name} in homeroom {record.homeroom} grade
           {record.grade} would like to join the
           <strong class="text-red-500">{record.hasCapacity ? "" : "full"}</strong>
