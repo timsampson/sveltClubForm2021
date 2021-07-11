@@ -45,15 +45,15 @@
   }
 </script>
 
-<div class="mt-2 mx-auto p-4">
+<div class="mt-2 mx-auto p-4 w-3/4">
   <h1 class="text-2xl text-blue-800">Records for Processing</h1>
-  <p class="my-2 p-2 border border-blue-800 rounded-md ">
-    Please select the <span class="text-red-600">red checkbox </span>to reject the application, or
-    the <span class="text-green-700">green checkbox</span> to approve an application. If an applied
-    club is full, the entry will be in italics and have include the text:
+  <p class="my-2 p-2 border border-blue-800 rounded-md mx-auto ">
+    Please select the <span class="text-red-500 font-bold">red checkbox </span>to reject the
+    application, or the <span class="text-green-700 font-bold">green checkbox</span> to approve an
+    application. If an applied club is full, the entry will be in italics and have include the text:
     <strong class="text-red-500 italic">full</strong>
   </p>
-  <ul>
+  <ul class="p-2 mx-auto">
     {#each records as record}
       <li class="border-b-2 border-blue-200 pt-2 pb-1">
         <input
