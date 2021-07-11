@@ -1,13 +1,16 @@
-// if the application has a current club and if form status is edit, changeCurrentClub 
+// if the application has a current club and if form status is edit, changeCurrentClub
 
-function processEnrollment(application){
-    if (application.isInClub && application.formStatus === 'edit'){
-      
-    }
+function processEnrollment(application) {
+  if (application.isInClub && application.formStatus === "edit") {
+  }
 }
 
-async function processApprovedClubApplications(approvedApplications) {
-  approvedApplications.forEach((approvalId: string) => processApprovedClubApplication(approvalId));
+async function processApprovedClubApplications(records) {
+  // approvedApplications.forEach((approvalId: string) => processApprovedClubApplication(approvalId));
+  // approvedApplications.forEach((approvalId: string) => processApprovedClubApplication(approvalId));
+
+  records.approved.forEach((record) => logClubApplication(record));
+  records.rejected.forEach((record) => logClubApplication(record));
   return true;
 }
 async function processApprovedClubApplication(approvalId) {

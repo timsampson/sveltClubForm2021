@@ -42,6 +42,12 @@
     rejected.forEach((app) => console.log(app.recordId));
     console.log("records");
     console.table(records);
+    google.script.run
+      .withSuccessHandler(approvalResponse)
+      .processApprovedClubApplications({ approved, rejected });
+  }
+  function approvalResponse() {
+    alert("response completed");
   }
 </script>
 
