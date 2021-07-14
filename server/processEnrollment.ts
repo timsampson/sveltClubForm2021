@@ -1,5 +1,39 @@
+function teststuff() {
+  let application = {
+    appliedClubDetails: "Let's win an oscar.",
+    appliedClubId: 3,
+    appliedClubName: "Film Making",
+    appliedclubModerator: "Briggs Roger Stanborough, Ms. Lexi Alldridge",
+    canSubmit: true,
+    currentClubId: "9",
+    currentClubName: "Painting",
+    email: "tsampson@dishs.tp.edu.tw",
+    formStatus: "approved",
+    grade: 1,
+    hasCapacity: true,
+    hasPendingClub: false,
+    homeroom: "Taoyuan",
+    isApproved: true,
+    isInClub: true,
+    isModerator: null,
+    isStudent: true,
+    message:
+      "Your application for the Film Making has been approved. Your application id for your records is id2021145964.",
+    name: "Tim Sampson",
+    pendingClubName: null,
+    processed: true,
+    received: true,
+    recordId: "id2021145964",
+    school: "LS",
+    userRole: null,
+  };
+  processEnrollment(application); 
+}
+
 function processEnrollment(application) {
   if (application.formStatus == "approved") {
+    application.processed = true;
+    removePreviousClub(application);
     logClubApplication(application);
     logClubEnrollment(application);
   } else {
@@ -67,12 +101,16 @@ async function processReviewedClubApplication(record, status) {
   processEnrollment(application);
   sendApplicationEmail(application);
 }
-async function changeCurrentClub(application) {
+async function removePreviousClub(application) {
   // get index for the row and delete the row.
   let oldRecordRowIndex = clubEnrollmentRecords.findIndex(
     (record) => record.email == application.email
   );
-  clubEnrollmentSheet.deleteRow(oldRecordRowIndex + 1);
+  Logger.log(oldRecordRowIndex);
+
+  if (oldRecordRowIndex > 0) {
+    clubEnrollmentSheet.deleteRow(oldRecordRowIndex);
+  }
 }
 
 async function updateOriginalApplicationEntry(approvalId) {
