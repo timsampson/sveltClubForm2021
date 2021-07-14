@@ -27,7 +27,7 @@ function teststuff() {
     school: "LS",
     userRole: null,
   };
-  processEnrollment(application); 
+  processEnrollment(application);
 }
 
 function processEnrollment(application) {
@@ -109,7 +109,7 @@ async function removePreviousClub(application) {
   Logger.log(oldRecordRowIndex);
 
   if (oldRecordRowIndex > 0) {
-    clubEnrollmentSheet.deleteRow(oldRecordRowIndex);
+    clubEnrollmentSheet.deleteRow(oldRecordRowIndex + 2);
   }
 }
 
