@@ -59,12 +59,12 @@ let adminValues = adminSheet.getDataRange().getValues();
 let adminRecords = sheetToObjArr(adminValues);
 
 // club sheet value for sheet status
-const formStatusSheet = clubDB.getSheetByName("formstatus");
-let formStatus = formStatusSheet.getRange(2, 1).getValue();
+const formStatusSheet = clubDB.getSheetByName("formState");
+let formState = formStatusSheet.getRange(2, 1).getValue();
 
-function getFormStatus() {
-  formStatus = formStatusSheet.getRange(2, 1).getValue();
-  return formStatus;
+function getFormState() {
+  formState = formStatusSheet.getRange(2, 1).getValue();
+  return formState;
 }
 function getClubApplicationData() {
   return clubApplicationValues.slice();

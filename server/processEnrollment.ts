@@ -8,7 +8,7 @@ function teststuff() {
     currentClubId: "9",
     currentClubName: "Painting",
     email: "tsampson@dishs.tp.edu.tw",
-    formStatus: "approved",
+    formState: "approved",
     grade: 1,
     hasCapacity: true,
     hasPendingClub: false,
@@ -31,7 +31,7 @@ function teststuff() {
 }
 
 function processEnrollment(application) {
-  if (application.formStatus == "approved") {
+  if (application.formState == "approved") {
     application.processed = true;
     removePreviousClub(application);
     logClubApplication(application);
@@ -54,7 +54,7 @@ async function processReviewedClubApplications(records) {
 async function processReviewedClubApplication(record, status) {
   let originalRecordID = record.recordId;
   let clubDetails = await getClubDetails(record.appliedClubId);
-  let formStatus = await getFormStatus();
+  let formState = await getFormStatus();
   let updatedRecordId = applicationId(clubApplicationSheet);
 
   let application = {
@@ -65,7 +65,7 @@ async function processReviewedClubApplication(record, status) {
     appliedclubModerator: clubDetails.moderator,
     received: true,
     recordId: updatedRecordId,
-    formStatus: formStatus,
+    formState: formState,
     hasCapacity: clubDetails.enrolled < clubDetails.capacity,
     hasPendingClub: record.hasPendingClub,
     isInClub: record.isInClub,

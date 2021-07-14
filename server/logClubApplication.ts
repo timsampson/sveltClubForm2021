@@ -15,7 +15,7 @@ function logClubApplication(application) {
     application.hasCapacity,
     application.canSubmit,
     application.isApproved,
-    application.formStatus,
+    application.formState,
     application.received,
     application.hasPendingClub,
     application.pendingClubName,

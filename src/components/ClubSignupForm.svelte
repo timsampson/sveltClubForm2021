@@ -67,12 +67,12 @@
       if ($userDetails.hasPendingClub) {
         notice.set(`You have a pending approval for ${$userDetails.pendingClubName}.`);
       }
-    } else if ($userDetails.formStatus === "view" || $userDetails.formStatus === "closed") {
+    } else if ($userDetails.formState === "view" || $userDetails.formState === "closed") {
       closeTheForm();
       notice.set(
-        `We are not currently accepting club applications, the form status is ${$userDetails.formStatus}.`
+        `We are not currently accepting club applications, the form status is ${$userDetails.formState}.`
       );
-    } else if ($userDetails.formStatus === "submit") {
+    } else if ($userDetails.formState === "submit") {
       if (!$userDetails.isInClub) {
         openTheForm();
         notice.set(`Please select a club from the list.`);
@@ -82,7 +82,7 @@
           `You are already enrolled in the  ${$userDetails.currentClubName}. The form is currently closed.`
         );
       }
-    } else if ($userDetails.formStatus === "edit") {
+    } else if ($userDetails.formState === "edit") {
       openTheForm();
       if ($userDetails.isInClub) {
         notice.set(
@@ -92,7 +92,7 @@
       } else {
         notice.set(`Please select a club from the list.`);
       }
-    } else if ($userDetails.formStatus === "approval") {
+    } else if ($userDetails.formState === "approval") {
       openTheForm();
       if ($userDetails.isInClub) {
         notice.set(
@@ -201,20 +201,20 @@
       </svg>
       <span>Submit</span>
     </button>
-    {#if formClosed && $userDetails.formStatus !== undefined && !$userDetails.formSubmitted}
-      {#if $userDetails.formStatus === "view"}
+    {#if formClosed && $userDetails.formState !== undefined && !$userDetails.formSubmitted}
+      {#if $userDetails.formState === "view"}
         <br />
         <span class="text-blue-900 italic"
-          >{`The form status is ${$userDetails.formStatus} only.`}</span
+          >{`The form status is ${$userDetails.formState} only.`}</span
         >
-      {:else if $userDetails.formStatus === "submit" && $userDetails.isInClub}
+      {:else if $userDetails.formState === "submit" && $userDetails.isInClub}
         <br />
         <span class="text-blue-900 italic"
           >{`The form is only accepting enrollments for students not yet in clubs.`}</span
         >
       {:else}
         <br />
-        <span class="text-blue-900 italic">{`The form status is ${$userDetails.formStatus}.`}</span>
+        <span class="text-blue-900 italic">{`The form status is ${$userDetails.formState}.`}</span>
       {/if}
     {/if}
   </form>

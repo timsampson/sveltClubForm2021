@@ -10,7 +10,7 @@ function applicationId(sheet: GoogleAppsScript.Spreadsheet.Sheet) {
 async function setRecordClubApplicationEntry(clubId: string | number) {
   let clubDetails = await getClubDetails(clubId);
   let userState = await getUserState();
-  let formStatus = await getFormStatus();
+  let formState = await getFormState();
   let clubRecordId = applicationId(clubApplicationSheet);
 
   let application = {
@@ -21,7 +21,7 @@ async function setRecordClubApplicationEntry(clubId: string | number) {
     appliedclubModerator: clubDetails.moderator,
     received: true,
     recordId: clubRecordId,
-    formStatus: formStatus,
+    formState: formState,
     hasCapacity: clubDetails.enrolled < clubDetails.capacity,
     hasPendingClub: userState.hasPendingClub,
     isInClub: userState.isInClub,
@@ -44,31 +44,31 @@ async function setRecordClubApplicationEntry(clubId: string | number) {
   // check to see if the club is full
   // approval process
   if (application.hasCapacity) {
-    if (application.formStatus == "submit" && !application.isInClub) {
-      application.formStatus = "approved";
+    if (application.formState == "submit" && !application.isInClub) {
+      application.formState = "approved";
       application.processed, (application.isApproved = true);
       application.message = `Your application for the ${application.appliedClubName} has been approved.`;
-    } else if (application.formStatus == "submit" && application.isInClub) {
-      application.formStatus = "pending";
+    } else if (application.formState == "submit" && application.isInClub) {
+      application.formState = "pending";
       application.processed, (application.isApproved = false);
       application.message = `Your application for the ${application.appliedClubName} has not been approved. 
         You currently are in a club, and changes are not currently allowed. `;
-    } else if (application.formStatus == "edit") {
-      application.formStatus = "approved";
+    } else if (application.formState == "edit") {
+      application.formState = "approved";
       application.processed, (application.isApproved = true);
       application.message = `Your application for the ${application.appliedClubName} has been approved.`;
-    } else if (application.formStatus == "approval") {
-      application.formStatus = "pending";
+    } else if (application.formState == "approval") {
+      application.formState = "pending";
       application.processed, (application.isApproved = false);
       application.message = `Your application for the ${application.appliedClubName} is pending review by the club administrator.`;
     } else {
-      application.formStatus = "rejected";
+      application.formState = "rejected";
       application.processed, (application.isApproved = false);
       application.message = `Your application for the ${application.appliedClubName} has not been approved.  
         Please contact the club administrator.`;
     }
   } else {
-    application.formStatus = "rejected";
+    application.formState = "rejected";
     application.processed, (application.isApproved = false);
     application.message = `Your application for the ${application.appliedClubName} has not been approved.  
         Please contact the club administrator.`;

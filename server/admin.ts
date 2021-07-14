@@ -1,6 +1,6 @@
 function getClubsForApproval(){
     let filteredClubsForApprovalRecords = clubApplicationRecords.filter(function (application) {
-     return application.formStatus == 'pending' && !(application.processed === 'TRUE');
+     return application.formState == 'pending' && !(application.processed === 'TRUE');
   });
   filteredClubsForApprovalRecords.forEach(club => {
     // check club capacity and update.
