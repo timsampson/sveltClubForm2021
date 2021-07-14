@@ -48,20 +48,15 @@
   function updateFormMessage() {
     openTheForm();
     if ($userDetails.formSubmitted) {
+      closeTheForm();
       notice.set(
         `You have submitted an application for the ${selected.name} club. Please check your email for confirmation.`
       );
-      closeTheForm();
     } else if (selected.enrolled >= selected.capacity) {
       notice.set(`Sorry the ${selected.name} club is currently full, please select another club..`);
       formClosed = true;
       resetAlerts();
       alertDanger.set(true);
-    } else if ($userDetails.formSubmitted) {
-      notice.set(
-        `You have submitted an application for the ${selected.name} club. Please check your email for confirmation.`
-      );
-      closeTheForm();
     } else if (!$userDetails.canSubmit) {
       closeTheForm();
       if ($userDetails.isInClub) {
@@ -73,22 +68,22 @@
         notice.set(`You have a pending approval for ${$userDetails.pendingClubName}.`);
       }
     } else if ($userDetails.formStatus === "view" || $userDetails.formStatus === "closed") {
-      formClosed = true;
+      closeTheForm();
       notice.set(
         `We are not currently accepting club applications, the form status is ${$userDetails.formStatus}.`
       );
     } else if ($userDetails.formStatus === "submit") {
       if (!$userDetails.isInClub) {
-        formClosed = false;
+        openTheForm();
         notice.set(`Please select a club from the list.`);
       } else {
+        closeTheForm();
         notice.set(
           `You are already enrolled in the  ${$userDetails.currentClubName}. The form is currently closed.`
         );
-        closeTheForm();
       }
     } else if ($userDetails.formStatus === "edit") {
-      formClosed = false;
+      openTheForm();
       if ($userDetails.isInClub) {
         notice.set(
           ` You are currently enrolled a club. Submitting at the time will cancel your current enrollment in the 
