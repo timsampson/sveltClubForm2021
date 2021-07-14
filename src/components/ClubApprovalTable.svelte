@@ -44,7 +44,7 @@
     console.table(records);
     google.script.run
       .withSuccessHandler(approvalResponse)
-      .processApprovedClubApplications({ approved, rejected });
+      .processReviewedClubApplications({ approved, rejected });
   }
   function approvalResponse() {
     alert("response completed");

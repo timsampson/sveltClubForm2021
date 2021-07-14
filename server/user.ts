@@ -48,7 +48,6 @@ async function getUserState() {
       !userState.isInClub &&
       userState.formStatus === "submit" &&
       !userState.hasPendingClub) ||
-    userState.formStatus === "approval" ||
     userState.formStatus === "edit";
   return userState;
 }

@@ -1,4 +1,4 @@
-function sendapplicationEmail(application) {
+function sendApplicationEmail(application) {
   const htmlBody = HtmlService.createTemplateFromFile("welcome-mail");
   htmlBody.stuName = application.name;
   htmlBody.clubName = application.appliedClubName;
@@ -12,6 +12,6 @@ function sendapplicationEmail(application) {
     // cc: ccEmail,
     htmlBody: emailHtml,
     subject: welcomeMessage,
-    to: email,
+    to: 'tsampson@dishs.tp.edu.tw',
   });
 }

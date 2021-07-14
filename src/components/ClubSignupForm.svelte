@@ -10,8 +10,8 @@
     resetAlerts,
   } from "../messageStores.js";
   let clubsLoaded,
-    formResponseReceived,
-    formClosed = false;
+    formResponseReceived = false;
+  let formClosed = true;
   let approvalResponse = {};
   // club lists
   let clubs = [];
@@ -20,6 +20,7 @@
     name: "",
   };
   onMount(() => {
+    formClosed = false;
     notice.set(`Please wait while your choices load. `);
     resetAlerts();
     alertPrimary.set(true);
@@ -31,16 +32,32 @@
     resetAlerts();
     alertInfo.set(true);
   }
+  function openTheForm() {
+    formClosed = false;
+    resetAlerts();
+    alertPrimary.set(true);
+  }
   function handleSubmit() {
+    closeTheForm();
     $userDetails.formSubmitted = true;
     google.script.run
       .withSuccessHandler(clubSubmissionResponse)
       .setRecordClubApplicationEntry(selected.id);
     notice.set(`Your application for the ${selected.name} club is being processed. `);
-    closeTheForm();
   }
   function updateFormMessage() {
+    openTheForm();
     if ($userDetails.formSubmitted) {
+      notice.set(
+        `You have submitted an application for the ${selected.name} club. Please check your email for confirmation.`
+      );
+      closeTheForm();
+    } else if (selected.enrolled >= selected.capacity) {
+      notice.set(`Sorry the ${selected.name} club is currently full, please select another club..`);
+      formClosed = true;
+      resetAlerts();
+      alertDanger.set(true);
+    } else if ($userDetails.formSubmitted) {
       notice.set(
         `You have submitted an application for the ${selected.name} club. Please check your email for confirmation.`
       );
@@ -69,13 +86,6 @@
           `You are already enrolled in the  ${$userDetails.currentClubName}. The form is currently closed.`
         );
         closeTheForm();
-      }
-    } else if ($userDetails.formStatus === "approval") {
-      if (!$userDetails.isInClub) {
-        closeTheForm();
-      } else {
-        notice.set(`Please select a club from the list.`);
-        formClosed = false;
       }
     } else if ($userDetails.formStatus === "edit") {
       formClosed = false;
@@ -115,7 +125,7 @@
       );
       alertSuccess.set(true);
     } else if (!response.hasCapacity) {
-      notice.set(`{$notice} Sorry the club you've chosen is full.`);
+      notice.set(`Sorry the club you've chosen, the ${response.appliedClubName} club, is full.`);
       alertDanger.set(true);
     } else if (response.status == "pending") {
       notice.set(
@@ -132,6 +142,8 @@
     if (!formClosed) {
       alertSuccess.set(true);
       notice.set(`You have selected the ${selected.name} club.`);
+      console.log("selected club");
+      console.table(selected);
       $alertPrimary = true;
     }
   }
@@ -158,7 +170,8 @@
     </div>
     <button
       type="submit"
-      class="inline-flex items-center my-4 py-2 px-4 font-bold text-white transition-colors duration-150 hover:bg-blue-700  rounded-lg focus:shadow-outline disabled:opacity-50"
+      class="inline-flex items-center my-4 py-2 px-4 font-bold text-white transition-colors duration-150 
+      hover:bg-blue-700 rounded-lg focus:shadow-outline disabled:opacity-50 disabled:bg-blue-300 "
       class:bg-blue-500={selected.name.length > 1 && !userDetails.formSubmitted && !formClosed}
       class:bg-blue-300={selected.name.length < 1 || userDetails.formSubmitted || formClosed}
       disabled={!clubsLoaded ||
@@ -192,7 +205,7 @@
       {:else if $userDetails.formStatus === "submit" && $userDetails.isInClub}
         <br />
         <span class="text-blue-900 italic"
-          >{`The form is only accepting enrolments for students not yet in clubs.`}</span
+          >{`The form is only accepting enrollments for students not yet in clubs.`}</span
         >
       {:else}
         <br />

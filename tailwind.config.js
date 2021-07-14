@@ -17,6 +17,6 @@ module.exports = {
     require("@tailwindcss/forms"),
   ],
   variants: {
-    extend: { backgroundColor: ['odd','even'] },
+    extend: { backgroundColor: ['odd','even', 'disabled'] },
   },
 }

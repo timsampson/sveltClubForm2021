@@ -3,9 +3,10 @@ function applicationId(sheet: GoogleAppsScript.Spreadsheet.Sheet) {
   let formApplicationDate = new Date();
   let year = formApplicationDate.getFullYear();
   let day = formApplicationDate.getDate();
-  let recordId = "id" + year + day + lastRecordRow;
+  let recordId = "id" + year + day + lastRecordRow + Math.floor(Math.random() * 10);
   return recordId;
 }
+
 async function setRecordClubApplicationEntry(clubId: string | number) {
   let clubDetails = await getClubDetails(clubId);
   let userState = await getUserState();
@@ -46,7 +47,6 @@ async function setRecordClubApplicationEntry(clubId: string | number) {
     if (application.formStatus == "submit" && !application.isInClub) {
       application.formStatus = "approved";
       application.processed, (application.isApproved = true);
-      processEnrollment(application);
       application.message = `Your application for the ${application.appliedClubName} has been approved.`;
     } else if (application.formStatus == "submit" && application.isInClub) {
       application.formStatus = "pending";
@@ -55,14 +55,8 @@ async function setRecordClubApplicationEntry(clubId: string | number) {
         You currently are in a club, and changes are not currently allowed. `;
     } else if (application.formStatus == "edit") {
       application.formStatus = "approved";
-      processEnrollment(application);
       application.processed, (application.isApproved = true);
       application.message = `Your application for the ${application.appliedClubName} has been approved.`;
-      
-    } else if (application.formStatus == "approval") {
-      application.formStatus = "pending";
-      application.processed, (application.isApproved = false);
-      application.message = `Your application for the ${application.appliedClubName} is pending approval `;
     } else {
       application.formStatus = "rejected";
       application.processed, (application.isApproved = false);
@@ -75,8 +69,8 @@ async function setRecordClubApplicationEntry(clubId: string | number) {
     application.message = `Your application for the ${application.appliedClubName} has not been approved.  
         Please contact the club administrator.`;
   }
-  sendapplicationEmail(application);
-  logClubApplication(application);
+  application.message = `${application.message} Your application id for your records is ${application.recordId}.`;
+  sendApplicationEmail(application);
+  processEnrollment(application);
   return application;
 }
-
