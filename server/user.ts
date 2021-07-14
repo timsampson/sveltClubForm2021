@@ -44,11 +44,8 @@ async function getUserState() {
     userState.hasPendingClub = false;
   }
   userState.canSubmit =
-    (userState.formStatus === "submit" &&
-      !userState.isInClub &&
-      userState.formStatus === "submit" &&
-      !userState.hasPendingClub) ||
-    userState.formStatus === "edit";
+    (userState.formStatus === "submit" && !userState.isInClub && userState.formStatus === "submit" && !userState.hasPendingClub)  ||
+    userState.formStatus === "edit" || (userState.formStatus === "approval" && !userState.hasPendingClub);
   return userState;
 }
 function getUserEmail() {

@@ -57,6 +57,10 @@ async function setRecordClubApplicationEntry(clubId: string | number) {
       application.formStatus = "approved";
       application.processed, (application.isApproved = true);
       application.message = `Your application for the ${application.appliedClubName} has been approved.`;
+    } else if (application.formStatus == "approval") {
+      application.formStatus = "pending";
+      application.processed, (application.isApproved = false);
+      application.message = `Your application for the ${application.appliedClubName} is pending review by the club administrator.`;
     } else {
       application.formStatus = "rejected";
       application.processed, (application.isApproved = false);

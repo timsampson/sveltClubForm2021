@@ -20,10 +20,8 @@
     name: "",
   };
   onMount(() => {
-    formClosed = false;
+    openTheForm();
     notice.set(`Please wait while your choices load. `);
-    resetAlerts();
-    alertPrimary.set(true);
     google.script.run.withSuccessHandler(setClubSignupList).getClubsFilteredByLevel();
     google.script.run.withSuccessHandler(updateUserDetails).getUserState();
   });
@@ -43,7 +41,9 @@
     google.script.run
       .withSuccessHandler(clubSubmissionResponse)
       .setRecordClubApplicationEntry(selected.id);
-    notice.set(`Your application for the ${selected.name} club is being processed. `);
+    notice.set(
+      `Your application for the ${selected.name} club is being processed. Please check your email for further details.`
+    );
   }
   function updateFormMessage() {
     openTheForm();
@@ -92,6 +92,18 @@
       } else {
         notice.set(`Please select a club from the list.`);
       }
+    } else if ($userDetails.formStatus === "approval") {
+      openTheForm();
+      if ($userDetails.isInClub) {
+        notice.set(
+          `You have selected the ${selected.name} club and our records indicate that you are currently enrolled in the ${$userDetails.currentClubName} club. 
+          If you make an application, you need to wait for your club appllicatin to be processed. Please allow up to a week and check your email for notification.
+          Continue to attend your current club until your application has been approved.`
+        );
+      } else {
+        notice.set(`You have selected the ${selected.name} club. 
+        If you make an application, you need to wait for your club to be approved. Please allow up to a week and check your email for notification.`);
+      }
     } else {
       closeTheForm();
       notice.set(`Please contact the club administrator.`);
@@ -101,13 +113,11 @@
     userDetails.set(updatedUserDetails);
     console.log("userDetails");
     console.table($userDetails);
-    updateFormMessage();
   }
   function setClubSignupList(clubSignupList) {
     clubsLoaded = true;
     notice.set(`Please select a club from the list below.`);
     clubs = clubSignupList;
-    updateFormMessage();
   }
   function clubSubmissionResponse(response) {
     formResponseReceived = true;
@@ -133,13 +143,13 @@
     }
   }
   function updateOnDropdownChange() {
-    updateFormMessage();
     if (!formClosed) {
       alertSuccess.set(true);
+      $alertPrimary = true;
       notice.set(`You have selected the ${selected.name} club.`);
       console.log("selected club");
       console.table(selected);
-      $alertPrimary = true;
+      updateFormMessage();
     }
   }
 </script>
