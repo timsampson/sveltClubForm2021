@@ -46,7 +46,13 @@
     );
   }
   function updateFormMessage() {
-    openTheForm();
+    //  if (!formClosed) {
+    //   alertSuccess.set(true);
+    //   $alertPrimary = true;
+    //   notice.set(`You have selected the ${selected.name} club.`);
+    //   console.log("selected club");
+    //   console.table(selected);
+    // }
     if ($userDetails.formSubmitted) {
       closeTheForm();
       notice.set(
@@ -73,36 +79,50 @@
         `We are not currently accepting club applications, the form status is ${$userDetails.formState}.`
       );
     } else if ($userDetails.formState === "submit") {
-      if (!$userDetails.isInClub) {
-        openTheForm();
-        notice.set(`Please select a club from the list.`);
-      } else {
+      if ($userDetails.isInClub) {
         closeTheForm();
         notice.set(
           `You are already enrolled in the  ${$userDetails.currentClubName}. The form is currently closed.`
         );
+      } else {
+        openTheForm();
+        if (selected.name.length > 0) {
+          notice.set(`You have selected the ${selected.name} club.`);
+        } else {
+          closeTheForm();
+          notice.set(`Please choose a club from the list below.`);
+        }
       }
     } else if ($userDetails.formState === "edit") {
       openTheForm();
       if ($userDetails.isInClub) {
-        notice.set(
-          ` You are currently enrolled a club. Submitting at the time will cancel your current enrollment in the 
+        if (selected.name.length > 0) {
+          notice.set(
+            `You have selected the ${selected.name} club. Submitting at the time will cancel your current enrollment in the 
           ${$userDetails.currentClubName} club.`
-        );
+          );
+        } else {
+          notice.set(
+            `Please choose a club from the list below. Submitting at the time will cancel your current enrollment in the 
+          ${$userDetails.currentClubName} club.`
+          );
+        }
       } else {
-        notice.set(`Please select a club from the list.`);
+        notice.set(`You have selected the ${selected.name} club.`);
       }
     } else if ($userDetails.formState === "approval") {
       openTheForm();
-      if ($userDetails.isInClub) {
-        notice.set(
-          `You have selected the ${selected.name} club and our records indicate that you are currently enrolled in the ${$userDetails.currentClubName} club. 
+      if (selected.name.length > 0) {
+        if ($userDetails.isInClub) {
+          notice.set(
+            `You have selected the ${selected.name} club and our records indicate that you are currently enrolled in the ${$userDetails.currentClubName} club. 
           If you make an application, you need to wait for your club appllicatin to be processed. Please allow up to a week and check your email for notification.
           Continue to attend your current club until your application has been approved.`
-        );
-      } else {
-        notice.set(`You have selected the ${selected.name} club. 
+          );
+        } else {
+          notice.set(`You have selected the ${selected.name} club. 
         If you make an application, you need to wait for your club to be approved. Please allow up to a week and check your email for notification.`);
+        }
       }
     } else {
       closeTheForm();
@@ -110,6 +130,7 @@
     }
   }
   function updateUserDetails(updatedUserDetails) {
+    updateFormMessage();
     userDetails.set(updatedUserDetails);
     console.log("userDetails");
     console.table($userDetails);
@@ -143,14 +164,7 @@
     }
   }
   function updateOnDropdownChange() {
-    if (!formClosed) {
-      alertSuccess.set(true);
-      $alertPrimary = true;
-      notice.set(`You have selected the ${selected.name} club.`);
-      console.log("selected club");
-      console.table(selected);
-      updateFormMessage();
-    }
+    updateFormMessage();
   }
 </script>
 

@@ -44,7 +44,7 @@
             <td class="min-w-26 px-2 border border-blue-800">{record.appliedClubDetails}</td>
             <td class="min-w-26 px-2 border border-blue-800">{record.appliedClubId}</td>
             <td class="min-w-26 px-2 border border-blue-800">{record.appliedClubName}</td>
-            <td class="min-w-26 px-2 border border-blue-800">{record.formState}</td>
+            <td class="min-w-26 px-2 border border-blue-800">{record.applicationStatus}</td>
             <td class="min-w-26 px-2 border border-blue-800">{record.isApproved}</td>
           </tr>
         {/each}

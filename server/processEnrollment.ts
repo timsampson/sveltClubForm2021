@@ -54,7 +54,7 @@ async function processReviewedClubApplications(records) {
 async function processReviewedClubApplication(record, status) {
   let originalRecordID = record.recordId;
   let clubDetails = await getClubDetails(record.appliedClubId);
-  let formState = await getFormStatus();
+  let formState = await getFormState();
   let updatedRecordId = applicationId(clubApplicationSheet);
 
   let application = {

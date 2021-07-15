@@ -21,7 +21,7 @@ async function getUserState() {
   let userDetails = await getStudentInfo();
   let homeroomDetails = await getUserHRDetails();
   userState.isAdmin = checkIsAdmin();
-  userState.formState = getFormStatus();
+  userState.formState = getFormState();
   if (userDetails) {
     userState.isStudent = true;
   }
@@ -44,8 +44,11 @@ async function getUserState() {
     userState.hasPendingClub = false;
   }
   userState.canSubmit =
-    (userState.formState === "submit" && !userState.isInClub && userState.formState === "submit" && !userState.hasPendingClub)  ||
-    userState.formState === "edit" || (userState.formState === "approval" && !userState.hasPendingClub);
+    ((userState.formState === "submit" && !userState.isInClub) && (userState.formState === "submit" && !userState.hasPendingClub))  ||
+    (userState.formState === "edit") || 
+    (userState.formState === "approval" && !userState.hasPendingClub) ||
+    (userState.formState === "request" && userState.isInClub) ||
+    (userState.formState === "request" && !userState.isInClub );
   return userState;
 }
 function getUserEmail() {

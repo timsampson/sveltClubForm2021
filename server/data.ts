@@ -59,7 +59,7 @@ let adminValues = adminSheet.getDataRange().getValues();
 let adminRecords = sheetToObjArr(adminValues);
 
 // club sheet value for sheet status
-const formStatusSheet = clubDB.getSheetByName("formState");
+const formStatusSheet = clubDB.getSheetByName("formstate");
 let formState = formStatusSheet.getRange(2, 1).getValue();
 
 function getFormState() {
