@@ -46,18 +46,14 @@
     );
   }
   function updateFormMessage() {
-    //  if (!formClosed) {
-    //   alertSuccess.set(true);
-    //   $alertPrimary = true;
-    //   notice.set(`You have selected the ${selected.name} club.`);
-    //   console.log("selected club");
-    //   console.table(selected);
-    // }
     if ($userDetails.formSubmitted) {
       closeTheForm();
       notice.set(
         `You have submitted an application for the ${selected.name} club. Please check your email for confirmation.`
       );
+    } else if ($userDetails.formState === "view" || $userDetails.formState === "closed") {
+      closeTheForm();
+      notice.set(`We are not currently accepting club applications.`);
     } else if (selected.enrolled >= selected.capacity) {
       notice.set(`Sorry the ${selected.name} club is currently full, please select another club..`);
       formClosed = true;
@@ -73,11 +69,6 @@
       if ($userDetails.hasPendingClub) {
         notice.set(`You have a pending approval for ${$userDetails.pendingClubName}.`);
       }
-    } else if ($userDetails.formState === "view" || $userDetails.formState === "closed") {
-      closeTheForm();
-      notice.set(
-        `We are not currently accepting club applications, the form status is ${$userDetails.formState}.`
-      );
     } else if ($userDetails.formState === "submit") {
       if ($userDetails.isInClub) {
         closeTheForm();
@@ -119,6 +110,10 @@
           If you make an application, you need to wait for your club appllicatin to be processed. Please allow up to a week and check your email for notification.
           Continue to attend your current club until your application has been approved.`
           );
+        } else if ($userDetails.hasPendingClub) {
+          notice.set(
+            `You currently have a pending club, the ${$userDetails.pendingClubName} club.`
+          );
         } else {
           notice.set(`You have selected the ${selected.name} club. 
         If you make an application, you need to wait for your club to be approved. Please allow up to a week and check your email for notification.`);
@@ -130,15 +125,15 @@
     }
   }
   function updateUserDetails(updatedUserDetails) {
-    updateFormMessage();
     userDetails.set(updatedUserDetails);
     console.log("userDetails");
     console.table($userDetails);
+    updateFormMessage();
   }
   function setClubSignupList(clubSignupList) {
     clubsLoaded = true;
-    notice.set(`Please select a club from the list below.`);
     clubs = clubSignupList;
+    notice.set(`Please select a club from the list below.`);
   }
   function clubSubmissionResponse(response) {
     formResponseReceived = true;
