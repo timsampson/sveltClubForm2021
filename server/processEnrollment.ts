@@ -29,9 +29,15 @@ function teststuff() {
   };
   processEnrollment(application);
 }
+function getClubsForApproval() {
+  let filteredClubsForApprovalRecords = clubApplicationRecords.filter(function (application) {
+    return application.applicationStatus == "pending" && !(application.processed === "TRUE");
+  });
+  return filteredClubsForApprovalRecords;
+}
 
 function processEnrollment(application) {
-  if (application.formState == "approved") {
+  if (application.applicationStatus == "approved") {
     application.processed = true;
     removePreviousClub(application);
     logClubApplication(application);
