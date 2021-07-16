@@ -1,15 +1,7 @@
 <script>
   import { fade } from "svelte/transition";
   google.script.run.withSuccessHandler(showUserClubRecord).getClubApplicationRecordsForUser();
-  export let titles = [
-    "name",
-    "moderator",
-    "description",
-    "club Id",
-    "club Name",
-    "status",
-    "approved",
-  ];
+  export let titles = ["name", "moderator", "description", "club Id", "club Name", "status"];
   export let records = [];
   function showUserClubRecord(allUserApplicationRecords) {
     records = allUserApplicationRecords;
@@ -45,7 +37,6 @@
             <td class="min-w-26 px-2 border border-blue-800">{record.appliedClubId}</td>
             <td class="min-w-26 px-2 border border-blue-800">{record.appliedClubName}</td>
             <td class="min-w-26 px-2 border border-blue-800">{record.applicationStatus}</td>
-            <td class="min-w-26 px-2 border border-blue-800">{record.isApproved}</td>
           </tr>
         {/each}
       </tbody>

@@ -5,16 +5,15 @@
   let approved = [];
   let rejects = [];
   let rejected = [];
+  let completed = false;
   onMount(() => {
     google.script.run.withSuccessHandler(showApprovalRecords).getClubsForApproval();
   });
   function showApprovalRecords(allUserApplicationRecords) {
     records = allUserApplicationRecords;
-    console.log(`record lenght is: ${records.length > 0}`);
-    console.log("records");
-    console.table(records);
   }
   function handleClick() {
+    completed = false;
     approvals = document.getElementsByName("approvals");
     rejects = document.getElementsByName("rejects");
     if (approvals.length > 0 || rejects.length > 0) {
@@ -39,18 +38,15 @@
         }
       }
     }
-    console.log("approved");
-    approved.forEach((app) => console.log(app.recordId));
-    console.log("rejected");
-    rejected.forEach((app) => console.log(app.recordId));
-    console.log("records");
-    console.table(records);
     google.script.run
       .withSuccessHandler(approvalResponse)
       .processReviewedClubApplications({ approved, rejected });
   }
-  function approvalResponse() {
-    alert("response completed");
+  function approvalResponse(isCompleted) {
+    completed = isCompleted;
+  }
+  function completedIsFalse() {
+    completed = false;
   }
 </script>
 
@@ -67,11 +63,13 @@
       {#each records as record}
         <li class="border-b-2 border-blue-200 pt-2 pb-1">
           <input
+            on:click={completedIsFalse}
             type="checkbox"
             class="{record.recordId} text-green-500 rounded border-2 border-green-500 focus:ring-green-500 mr-2"
             name="approvals"
           />
           <input
+            on:click={completedIsFalse}
             type="checkbox"
             class="{record.recordId} text-red-500 border-2 rounded border-red-500 focus:ring-red-500"
             name="rejects"
@@ -85,25 +83,30 @@
         </li>
       {/each}
     </ul>
-    <button
-      on:click={handleClick}
-      class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg inline-flex items-center mt-4"
-    >
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        class="h-5 w-5"
-        viewBox="0 0 20 20"
-        fill="currentColor"
+    <div class="inline-flex">
+      <button
+        on:click={handleClick}
+        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg inline-flex items-center mt-4 mr-2"
+        class:bg-green-500={completed}
       >
-        <path
-          fill-rule="evenodd"
-          d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-          clip-rule="evenodd"
-        />
-      </svg>
-      <span class="ml-2">Submit</span>
-    </button>
+        {#if completed}
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-5 w-5"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+              clip-rule="evenodd"
+            />
+          </svg>
+        {/if}
+        <span class="ml-2">Submit</span>
+      </button>
+    </div>
   {:else}
-    <h1 class="text-2xl text-blue-800">Records for Processing loading.....</h1>
+    <h1 class="text-2xl text-blue-800">No records awaiting approval</h1>
   {/if}
 </div>
