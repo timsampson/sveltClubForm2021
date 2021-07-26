@@ -1,6 +1,6 @@
 <script>
   import { onMount } from "svelte";
-  import { userDetails } from "../userStores.js";
+  import { userDetails } from "../user-store.js";
   onMount(() => {
     google.script.run.withSuccessHandler(updateUserDetails).getUserState();
   });

@@ -1,6 +1,6 @@
 <script>
   import { onMount } from "svelte";
-  import { userDetails } from "../userStores.js";
+  import { userDetails } from "../user-store.js";
   import {
     notice,
     alertInfo,
@@ -8,7 +8,7 @@
     alertPrimary,
     alertSuccess,
     resetAlerts,
-  } from "../messageStores.js";
+  } from "../message-store.js";
   let clubsLoaded,
     formResponseReceived = false;
   let formClosed = true;

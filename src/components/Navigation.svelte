@@ -3,7 +3,7 @@
   export let emailLoaded;
   import { onMount } from "svelte";
   import { fade } from "svelte/transition";
-  import { userDetails } from "../userStores.js";
+  import { userDetails } from "../user-store.js";
 
   emailLoaded = false;
   onMount(() => {

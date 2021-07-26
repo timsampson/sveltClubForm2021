@@ -17,7 +17,7 @@
   <table class="table table-auto mx-auto text-sm border-blue-800 border-4">
     <thead>
       <tr>
-        {#each titles as title, i (titles[i])}
+        {#each titles as title}
           <th class="capitalize bg-blue-600 text-white px-2 border">{title}</th>
         {/each}
       </tr>

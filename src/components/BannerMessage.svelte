@@ -1,5 +1,5 @@
 <script>
-  import { notice, alertInfo, alertDanger, alertPrimary, alertSuccess } from "../messageStores.js";
+  import { notice, alertInfo, alertDanger, alertPrimary, alertSuccess } from "../message-store.js";
 </script>
 
 <div>
