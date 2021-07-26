@@ -185,7 +185,7 @@
     <button
       type="submit"
       class="inline-flex items-center my-4 py-2 px-4 font-bold text-white transition-colors duration-150 
-      hover:bg-blue-700 rounded-lg focus:shadow-outline disabled:opacity-50 disabled:bg-blue-300 "
+      hover:bg-blue-700 rounded-lg focus:shadow-outline disabled:opacity-50 disabled:bg-blue-300"
       class:bg-blue-500={selected.name.length > 1 && !userDetails.formSubmitted && !formClosed}
       class:bg-blue-300={selected.name.length < 1 || userDetails.formSubmitted || formClosed}
       disabled={!clubsLoaded ||
