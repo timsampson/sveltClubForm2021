@@ -1,10 +1,14 @@
 <script>
-  export let completed;
+  export let submitted;
 </script>
 
 <button
-  class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg inline-flex items-center mt-4 mr-2"
-  class:bg-green-500={completed}
+  on:click
+  class="hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg inline-flex items-center mt-4 mr-2"
+  class:bg-green-500={submitted}
+  class:hover:bg-green-700={submitted}
+  class:bg-blue-500={!submitted}
+  class:hover:bg-blue-700={!submitted}
 >
   <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
     <path
