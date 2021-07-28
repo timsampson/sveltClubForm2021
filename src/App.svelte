@@ -1,5 +1,5 @@
 <script>
-  import Navigation from "./components/Navigation.svelte";
+  import Navigation from "./components/ui/Navigation.svelte";
   import Home from "./routes/Home.svelte";
   import Signup from "./routes/Signup.svelte";
   import Dashboard from "./routes/Dashboard.svelte";
