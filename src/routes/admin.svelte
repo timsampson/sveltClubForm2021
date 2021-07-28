@@ -1,5 +1,5 @@
 <script>
-  import ClubApprovalTable from "../components/ClubApprovalTable.svelte";
+  import ClubApprovalTable from "../components/ClubApprovalList.svelte";
 </script>
 
 <ClubApprovalTable />
