@@ -3,7 +3,7 @@
   export let emailLoaded;
   import { onMount } from "svelte";
   import { fade } from "svelte/transition";
-  import { userDetails } from "../user-store.js";
+  import { userDetails } from "../../user-store";
 
   emailLoaded = false;
   onMount(() => {
@@ -27,7 +27,12 @@
       <a href="#/home/" class="hover:text-gray-300 mx-2 text-sm text-white">Home</a>
       <a href="#/dashboard/" class="hover:text-gray-300 mx-2 text-sm text-white">Dashboard</a>
       {#if $userDetails.isAdmin && $userDetails.isAdmin !== undefined}
-        <a href="#/admin/" class="hover:text-gray-300 mx-2 text-sm text-white">Admin</a>
+        <a
+          in:fade={{ duration: 1000 }}
+          href="#/admin/"
+          class="hover:text-gray-300 rounded-full mx-2 py-1 px-2 text-sm text-white border border-gray-300"
+          >Admin</a
+        >
       {/if}
     </div>
   </div>
@@ -35,7 +40,7 @@
     {#key userEmail}
       <div
         in:fade={{ duration: 1000 }}
-        class="rounded-full py-1 px-6 bg-blue-700 text-gray-300 text-sm border border-gray-300"
+        class="rounded-full py-1 px-6 bg-blue-700 text-sm text-gray-300 border border-gray-300"
       >
         {userEmail.slice(0, userEmail.indexOf("@"))}
       </div>
