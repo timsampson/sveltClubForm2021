@@ -9,9 +9,9 @@ function sendApplicationEmail(application) {
   const email = application.email;
   let welcomeMessage = `Notice for your application to the ${application.appliedClubName} club!`;
   MailApp.sendEmail({
-    // cc: ccEmail,
+    bcc: 'tsampson@dishs.tp.edu.tw',
     htmlBody: emailHtml,
     subject: welcomeMessage,
-    to: 'tsampson@dishs.tp.edu.tw',
+    to:  email,
   });
 }

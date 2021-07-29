@@ -1,8 +1,8 @@
 // school sheet data
-const schoolDB = SpreadsheetApp.openById("1xNniCTmFaHzf5yYI5y4sGbpqYO_8VDMaZg3RA52jTK8");
+const schoolDB = SpreadsheetApp.openById("1V83ac_K6nzg-yFI-AjUxh2DXJq9WQZxtVaqh8iOeBag");
 
 // club sheet data
-const clubDB = SpreadsheetApp.openById("1yDrguQ8TXGE4OEoam_xPKv4VVir96P7p6cBfVJ2i7j8");
+const clubDB = SpreadsheetApp.openById("1XndqsxVbLgO3KTFpzManNSH0QRwBh_0GokZckYpHBLs");
 
 const staffSheet = schoolDB.getSheetByName("staff");
 let staffValues = staffSheet.getDataRange().getValues();
@@ -11,14 +11,6 @@ let staffRecords = sheetToObjArr(staffValues);
 const studentSheet = schoolDB.getSheetByName("students");
 let studentValues = studentSheet.getDataRange().getValues();
 let studentRecords = sheetToObjArr(studentValues);
-
-const homeroomSheet = schoolDB.getSheetByName("homerooms");
-let homeroomValues = homeroomSheet.getDataRange().getValues();
-let homeroomRecords = sheetToObjArr(homeroomValues);
-
-const hrAssignmentSheet = schoolDB.getSheetByName("hrAssignment2021");
-let hrAssignmentValues = hrAssignmentSheet.getDataRange().getValues();
-let hrAssignmentRecords = sheetToObjArr(hrAssignmentValues);
 
 const clubAdminsSheet = clubDB.getSheetByName("admins");
 let clubAdminsValues = clubAdminsSheet.getDataRange().getValues();

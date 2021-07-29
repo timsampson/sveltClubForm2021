@@ -28,7 +28,7 @@
   function closeTheForm() {
     formClosed = true;
     resetAlerts();
-    alertInfo.set(true);
+    alertDanger.set(true);
   }
   function openTheForm() {
     formClosed = false;
@@ -54,11 +54,6 @@
     } else if ($userDetails.formState === "view" || $userDetails.formState === "closed") {
       closeTheForm();
       notice.set(`We are not currently accepting club applications.`);
-    } else if (selected.enrolled >= selected.capacity) {
-      notice.set(`Sorry the ${selected.name} club is currently full, please select another club..`);
-      formClosed = true;
-      resetAlerts();
-      alertDanger.set(true);
     } else if (!$userDetails.canSubmit) {
       closeTheForm();
       if ($userDetails.isInClub) {
@@ -69,6 +64,11 @@
       if ($userDetails.hasPendingClub) {
         notice.set(`You have a pending approval for ${$userDetails.pendingClubName}.`);
       }
+    } else if (selected.enrolled >= selected.capacity) {
+      notice.set(`Sorry the ${selected.name} club is currently full, please select another club.`);
+      formClosed = true;
+      resetAlerts();
+      alertDanger.set(true);
     } else if ($userDetails.formState === "submit") {
       if ($userDetails.isInClub) {
         closeTheForm();
@@ -99,7 +99,7 @@
           );
         }
       } else {
-        notice.set(`You have selected the ${selected.name} club.`);
+        notice.set(`Please select a club from the list below.`);
       }
     } else if ($userDetails.formState === "approval") {
       openTheForm();
@@ -118,6 +118,8 @@
           notice.set(`You have selected the ${selected.name} club. 
         If you make an application, you need to wait for your club to be approved. Please allow up to a week and check your email for notification.`);
         }
+      } else {
+        notice.set(`Please select a club from the list below.`);
       }
     } else {
       closeTheForm();
@@ -133,7 +135,6 @@
   function setClubSignupList(clubSignupList) {
     clubsLoaded = true;
     clubs = clubSignupList;
-    notice.set(`Please select a club from the list below.`);
   }
   function clubSubmissionResponse(response) {
     formResponseReceived = true;

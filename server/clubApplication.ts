@@ -47,30 +47,30 @@ async function setRecordClubApplicationEntry(clubId: string | number) {
     if (application.formState == "submit" && !application.isInClub) {
       application.applicationStatus = "approved";
       application.processed, (application.isApproved = true);
-      application.message = `Your application for the ${application.appliedClubName} has been approved.`;
+      application.message = `Your application for the ${application.appliedClubName} club has been approved.`;
     } else if (application.formState == "submit" && application.isInClub) {
       application.applicationStatus = "pending";
       application.processed, (application.isApproved = false);
-      application.message = `Your application for the ${application.appliedClubName} has not been approved. 
+      application.message = `Your application for the ${application.appliedClubName} club has not been approved. 
         You currently are in a club, and changes are not currently allowed. `;
     } else if (application.formState == "edit") {
       application.applicationStatus = "approved";
       application.processed, (application.isApproved = true);
-      application.message = `Your application for the ${application.appliedClubName} has been approved.`;
+      application.message = `Your application for the ${application.appliedClubName} club has been approved.`;
     } else if (application.formState == "approval") {
       application.applicationStatus = "pending";
       application.processed, (application.isApproved = false);
-      application.message = `Your application for the ${application.appliedClubName} is pending review by the club administrator.`;
+      application.message = `Your application for the ${application.appliedClubName} club is pending review by the club administrator.`;
     } else {
       application.applicationStatus = "rejected";
       application.processed, (application.isApproved = false);
-      application.message = `Your application for the ${application.appliedClubName} has not been approved.  
+      application.message = `Your application for the ${application.appliedClubName} club has not been approved.  
         Please contact the club administrator.`;
     }
   } else {
     application.formState = "rejected";
     application.processed, (application.isApproved = false);
-    application.message = `Your application for the ${application.appliedClubName} has not been approved.  
+    application.message = `Your application for the ${application.appliedClubName} club has not been approved.  
         Please contact the club administrator.`;
   }
   application.message = `${application.message} Your application id for your records is ${application.recordId}.`;

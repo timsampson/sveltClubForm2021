@@ -1,11 +1,14 @@
+function testuser(){
+  getUserState().then( (value) => Logger.log(value));
+}
 async function getUserState() {
   let userState = {
     email: getUserEmail(),
     isInClub: false,
     name: undefined,
-    grade: undefined,
     school: undefined,
     homeroom: undefined,
+    grade: undefined,
     userRole: undefined,
     isStudent: undefined,
     hasPendingClub: undefined,
@@ -19,16 +22,15 @@ async function getUserState() {
   };
   let userClubDetails = await getUserCurrentClubDetails();
   let userDetails = await getStudentInfo();
-  let homeroomDetails = await getUserHRDetails();
+  userState.name = userDetails.full_name;
+  userState.grade = userDetails.grade;
+  userState.school = userDetails.school;
+  userState.homeroom = userDetails.homeroom;
   userState.isAdmin = checkIsAdmin();
   userState.formState = getFormState();
   if (userDetails) {
     userState.isStudent = true;
   }
-  userState.name = userDetails.full_name;
-  userState.homeroom = homeroomDetails.homeroom;
-  userState.school = homeroomDetails.level;
-  userState.grade = homeroomDetails.grade;
   if (userClubDetails.isInClub === true) {
     userState.currentClubName = userClubDetails.club_name;
     userState.currentClubId = userClubDetails.club_id;
@@ -36,7 +38,7 @@ async function getUserState() {
   } else {
     userState.isInClub = false;
   }
-  let pendingClub = getPendingClubsForUser();
+  let pendingClub = await getPendingClubsForUser();
   if (pendingClub.length > 0) {
     userState.hasPendingClub = true;
     userState.pendingClubName = pendingClub[0].clubname;
@@ -54,13 +56,7 @@ async function getUserState() {
 function getUserEmail() {
   return getEmail();
 }
-function getUserHRDetails() {
-  let filteredHRDetails = hrAssignmentRecords.filter(function (student) {
-    return student.email == getUserEmail();
-  });
-  return filteredHRDetails[0];
-}
-function getStudentInfo() {
+async function getStudentInfo() {
   let filteredStudentInfo = studentRecords.filter(function (student) {
     return student.email == getUserEmail();
   });
@@ -91,23 +87,22 @@ async function getUserCurrentClubDetails() {
   }
   return clubDetails;
 }
-
-function getPendingClubsForUser() {
+async function getPendingClubsForUser() {
   let pendingClubsForUser = clubApplicationRecords.filter(function (record) {
     return record.email == getUserEmail() && record.status == "pending";
   });
   return pendingClubsForUser;
 }
-function getClubsFilteredByLevel() {
+async function getClubsFilteredByLevel() {
   // need student details
+  let userInfo = await getStudentInfo();
   // need available clubs
   // filter the availabe clubs by matches with student details.
-  let homeroomDetails = getUserHRDetails();
-  let allclubs = getClubRecords();
+  let allclubs = await getClubRecords();
   function isMatch(levelOptions) {
     let isMatch = false;
     levelOptions.forEach((element) => {
-      if (element == homeroomDetails.grade || element == homeroomDetails.level) {
+      if (element == userInfo.grade || element == userInfo.school || element == userInfo.homeroom) {
         isMatch = true;
       }
     });
@@ -121,10 +116,10 @@ function getClubsFilteredByLevel() {
   return clubsByLevel;
 }
 
-function currentUser(value: { name: string }) {
+async function currentUser(value: { name: string }) {
   return value.name == getUserEmail();
 }
-function checkIsAdmin() {
+async function checkIsAdmin() {
   let filterdClubAdminsRecords = clubAdminsRecords.filter(function (admins) {
     return admins.email === getUserEmail();
   });
