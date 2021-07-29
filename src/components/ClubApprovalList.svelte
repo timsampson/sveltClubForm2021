@@ -51,7 +51,6 @@
     let checkboxA = document.getElementById(a);
     let checkboxR = document.getElementById(r);
     if (checkboxA.checked == true && checkboxR.checked == true) {
-      console.log("change");
       checkboxA.checked = false;
       checkboxR.checked = false;
     }
@@ -72,7 +71,7 @@
         <li
           id={record.recordId}
           class="border-b-2 border-blue-200 pt-2 pb-1"
-          transition:slide={{ delay: 250, duration: 300, easing: quintOut }}
+          transition:slide|local={{ delay: 250, duration: 300, easing: quintOut }}
         >
           <input
             on:click={completedIsFalse.bind(this, i)}

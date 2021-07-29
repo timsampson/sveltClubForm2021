@@ -128,8 +128,6 @@
   }
   function updateUserDetails(updatedUserDetails) {
     userDetails.set(updatedUserDetails);
-    console.log("userDetails");
-    console.table($userDetails);
     updateFormMessage();
   }
   function setClubSignupList(clubSignupList) {
@@ -139,7 +137,6 @@
   function clubSubmissionResponse(response) {
     formResponseReceived = true;
     approvalResponse = response;
-    console.table(approvalResponse);
     resetAlerts();
     if (response.processed && response.status == "approved") {
       notice.set(

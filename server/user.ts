@@ -19,6 +19,7 @@ async function getUserState() {
     formState: undefined,
     canSubmit: undefined,
     isAdmin: undefined,
+    isTeacher: undefined,
   };
   let userClubDetails = await getUserCurrentClubDetails();
   let userDetails = await getStudentInfo();
@@ -26,8 +27,9 @@ async function getUserState() {
   userState.grade = userDetails.grade;
   userState.school = userDetails.school;
   userState.homeroom = userDetails.homeroom;
-  userState.isAdmin = checkIsAdmin();
-  userState.formState = getFormState();
+  userState.isAdmin = await checkIsAdmin();
+  userState.isTeacher = await checkIsTeacher();
+  userState.formState = await getFormState();
   if (userDetails) {
     userState.isStudent = true;
   }
@@ -124,4 +126,10 @@ async function checkIsAdmin() {
     return admins.email === getUserEmail();
   });
   return filterdClubAdminsRecords.length > 0;
+}
+async function checkIsTeacher() {
+  let filterdTeacherRecords = staffRecords.filter(function (teachers) {
+    return teachers.email === getUserEmail();
+  });
+  return filterdTeacherRecords.length > 0;
 }

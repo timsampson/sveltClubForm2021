@@ -8,11 +8,15 @@
   emailLoaded = false;
   onMount(() => {
     google.script.run.withSuccessHandler(setEmail).getUserEmail();
-    google.script.run.withSuccessHandler(updateUserDetails).getUserState();
+    getUpdatedUserDetails();
   });
   function setEmail(email) {
     userEmail = email;
   }
+  function getUpdatedUserDetails() {
+    google.script.run.withSuccessHandler(updateUserDetails).getUserState();
+  }
+
   function updateUserDetails(updatedUserDetails) {
     userDetails.set(updatedUserDetails);
   }
@@ -23,12 +27,29 @@
 >
   <div class="flex-initial">
     <div>
-      <a href="#/signup" class="hover:text-gray-300 mx-2 text-sm text-white">Sign up</a>
-      <a href="#/home/" class="hover:text-gray-300 mx-2 text-sm text-white">Home</a>
+      <a
+        href="#/signup"
+        class="hover:text-gray-300 mx-2 text-sm text-white"
+        on:click={getUpdatedUserDetails}>Sign up</a
+      >
+      <a
+        href="#/home/"
+        class="hover:text-gray-300 mx-2 text-sm text-white"
+        on:click={getUpdatedUserDetails}>Home</a
+      >
       <a href="#/dashboard/" class="hover:text-gray-300 mx-2 text-sm text-white">Dashboard</a>
+      {#if $userDetails.isTeacher && $userDetails.isTeacher !== undefined}
+        <a
+          in:fade={{ duration: 1000 }}
+          on:click={getUpdatedUserDetails}
+          href="#/merit/"
+          class="hover:text-gray-300 mx-2 text-sm text-white">Merit</a
+        >
+      {/if}
       {#if $userDetails.isAdmin && $userDetails.isAdmin !== undefined}
         <a
           in:fade={{ duration: 1000 }}
+          on:click={getUpdatedUserDetails}
           href="#/admin/"
           class="hover:text-gray-300 rounded-full mx-2 py-1 px-2 text-sm text-white border border-gray-300"
           >Admin</a
