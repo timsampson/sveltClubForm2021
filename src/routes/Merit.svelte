@@ -1,4 +1,8 @@
 <script>
+  import { studentsDB } from "../studentData";
+  import { slide } from "svelte/transition";
+  import { quintOut } from "svelte/easing";
+  let merits = ["Information", "Level 1", "Yellow Level", "Orange Level", "Red Level"];
   let level = "";
   let name = [];
   let homeroom = [];
@@ -13,19 +17,24 @@
       categories = informationData;
     } else if (level === "Level 1") {
       categories = level1Data;
-    } else if (level === "Yellow Card") {
+    } else if (level === "Yellow Level") {
       categories = YCData;
-    } else if (level === "Orange Card") {
+    } else if (level === "Orange Level") {
       categories = OCData;
-    } else if (level === "Red Card") {
+    } else if (level === "Red Level") {
       categories = RCData;
     }
-    categories = categories;
   }
+  let studentsData = studentsDB.slice();
 
+  let filteredStudents = [];
+  const searchStudents = () => {
+    return (filteredStudents = studentsData.filter((student) => {
+      let studentName = student.name.toLowerCase();
+      return studentName.includes(name.toLowerCase());
+    }));
+  };
   function handleSubmit() {}
-  import { slide } from "svelte/transition";
-  import { quintOut } from "svelte/easing";
 </script>
 
 <div class="m-4">
@@ -44,6 +53,7 @@
           type="text"
           placeholder="Jane Dough"
           bind:value={name}
+          on:input={searchStudents}
         />
         <p class="text-red-500 text-xs italic">Please fill out this field.</p>
       </div>
@@ -66,66 +76,20 @@
     <div class="flex flex-wrap -mx-3 mb-6">
       <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
         <div>
-          <div>
-            <label>
-              <input
-                type="radio"
-                value="Information"
-                bind:group={level}
-                on:submit={handleSubmit}
-                on:change={displayCategories}
-              />
-              Information
-            </label>
-          </div>
-          <div>
-            <label>
-              <input
-                type="radio"
-                value="Level 1"
-                bind:group={level}
-                on:submit={handleSubmit}
-                on:change={displayCategories}
-              />
-              Level 1
-            </label>
-          </div>
-          <div>
-            <label>
-              <input
-                type="radio"
-                value="Yellow Card"
-                bind:group={level}
-                on:submit={handleSubmit}
-                on:change={displayCategories}
-              />
-              Yellow Card
-            </label>
-          </div>
-          <div>
-            <label>
-              <input
-                type="radio"
-                value="Orange Card"
-                bind:group={level}
-                on:submit={handleSubmit}
-                on:change={displayCategories}
-              />
-              Orange Card
-            </label>
-          </div>
-          <div>
-            <label>
-              <input
-                type="radio"
-                value="Red Card"
-                bind:group={level}
-                on:submit={handleSubmit}
-                on:change={displayCategories}
-              />
-              Red Card
-            </label>
-          </div>
+          {#each merits as merit}
+            <div class="mb-2">
+              <label>
+                <input
+                  type="radio"
+                  value={merit}
+                  bind:group={level}
+                  on:submit={handleSubmit}
+                  on:change={displayCategories}
+                />
+                <span class="ml-2">{merit}</span>
+              </label>
+            </div>
+          {/each}
         </div>
         <p class="text-red-500 text-xs italic">Select a level from the list.</p>
       </div>
@@ -159,4 +123,13 @@
       Button
     </button>
   </div>
+</div>
+<div class="ml-8 ">
+  {#if name && studentsData.length === 0}
+    <h1>no results</h1>
+  {:else if filteredStudents.length > 0}
+    {#each filteredStudents as student}
+      <p class="mt-1 text-blue-800">{student.name} in {student.homeroom}</p>
+    {/each}
+  {/if}
 </div>

@@ -12,6 +12,14 @@ const studentSheet = schoolDB.getSheetByName("students");
 let studentValues = studentSheet.getDataRange().getValues();
 let studentRecords = sheetToObjArr(studentValues);
 
+const studenthrSheet = schoolDB.getSheetByName("studenthr");
+let studenthrValues = studenthrSheet.getDataRange().getValues();
+let studenthrRecords = sheetToObjArr(studenthrValues);
+
+function getStudenthrValues(){
+  return studenthrRecords;
+}
+
 const clubAdminsSheet = clubDB.getSheetByName("admins");
 let clubAdminsValues = clubAdminsSheet.getDataRange().getValues();
 let clubAdminsRecords = sheetToObjArr(clubAdminsValues);

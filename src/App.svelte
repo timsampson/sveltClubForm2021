@@ -1,7 +1,6 @@
 <script>
   import Router from "svelte-spa-router";
   import { wrap } from "svelte-spa-router/wrap";
-  import { push } from "svelte-spa-router";
 
   import { userDetails } from "./user-store";
   import Navigation from "./components/ui/Navigation.svelte";
