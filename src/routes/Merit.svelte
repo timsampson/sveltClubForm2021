@@ -1,11 +1,13 @@
 <script>
-  import { studentsDB } from "../studentData";
+  import { studentData } from "../studentData";
+  import { onMount } from "svelte";
   import { slide } from "svelte/transition";
   import { quintOut } from "svelte/easing";
   let merits = ["Information", "Level 1", "Yellow Level", "Orange Level", "Red Level"];
   let level = "";
-  let name = [];
-  let homeroom = [];
+  let searchTerm = "";
+  let selectedHomeroom;
+  let homerooms = [];
   let categories = [];
   let informationData = ["sleepy", "eating in class", "late", "emotional"];
   let level1Data = ["off task", "constantly chatting", "tardy"];
@@ -25,53 +27,66 @@
       categories = RCData;
     }
   }
-  let studentsData = studentsDB.slice();
-
   let filteredStudents = [];
+
+  const getHomerooms = () => {
+    for (let studentObj of studentData) {
+      if (!homerooms.includes(studentObj.homeroom)) {
+        homerooms = [...homerooms, studentObj.homeroom];
+      }
+    }
+    homerooms = homerooms.sort();
+  };
+  onMount(() => getHomerooms());
+
+  $: if (selectedHomeroom) getStudentsByHr();
+  $: console.log(filteredStudents, selectedHomeroom);
+
+  const getStudentsByHr = () => {
+    searchTerm = "";
+    if (selectedHomeroom === "all") {
+      return (filteredStudents = []);
+    }
+    return (filteredStudents = studentData.filter(
+      (student) => student.homeroom === selectedHomeroom
+    ));
+  };
+
+  $: if (searchTerm) selectedHomeroom = "";
   const searchStudents = () => {
-    return (filteredStudents = studentsData.filter((student) => {
+    return (filteredStudents = studentData.filter((student) => {
       let studentName = student.name.toLowerCase();
-      return studentName.includes(name.toLowerCase());
+      return studentName.includes(searchTerm.toLowerCase());
     }));
   };
+  $: console.log(searchStudents);
   function handleSubmit() {}
 </script>
 
 <div class="m-4">
   <form class="w-full max-w-lg">
-    <div class="flex flex-wrap -mx-3 mb-6">
-      <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
-        <label
-          class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-          for="name"
-        >
-          Student Name
-        </label>
-        <input
-          class="appearance-none block w-full bg-gray-200 text-gray-700 border border-red-500 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
-          id="name"
-          type="text"
-          placeholder="Jane Dough"
-          bind:value={name}
-          on:input={searchStudents}
-        />
-        <p class="text-red-500 text-xs italic">Please fill out this field.</p>
-      </div>
-      <div class="w-full md:w-1/2 px-3">
-        <label
-          class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-          for="homeroom"
-        >
-          homeroom
-        </label>
-        <input
-          class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-          id="homeroom"
-          type="text"
-          placeholder="Homeroom"
-          bind:value={homeroom}
-        />
-      </div>
+    <div class="finline-flex space-x-4 mb-6">
+      <input
+        class="flex-1 mt-1 mr-6 rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+        type="text"
+        id="search-field"
+        placeholder="Enter Student Name"
+        autocomplete="off"
+        bind:value={searchTerm}
+        on:input={searchStudents}
+      />
+      <select
+        class="flex-1 w-1/2 mt-1 rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+        name="homeroom"
+        id="homeroom"
+        bind:value={selectedHomeroom}
+      >
+        <option disabled selected value="">Select a homeroom.</option>
+        <option value="all">All homerooms</option>
+        {#each homerooms as homeroom}
+          <option value={homeroom}>{homeroom}</option>
+        {/each}
+      </select>
     </div>
     <div class="flex flex-wrap -mx-3 mb-6">
       <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
@@ -125,7 +140,7 @@
   </div>
 </div>
 <div class="ml-8 ">
-  {#if name && studentsData.length === 0}
+  {#if searchTerm && studentData.length === 0}
     <h1>no results</h1>
   {:else if filteredStudents.length > 0}
     {#each filteredStudents as student}

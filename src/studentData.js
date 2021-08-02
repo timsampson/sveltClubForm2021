@@ -1,4 +1,4 @@
-export const studentsDB = [
+export const studentData = [
     {
         "name": "Samson Jeddy Childrens",
         "level": "LS",
