@@ -13,6 +13,7 @@ function logClubEnrollment(application) {
     application.appliedClubName,
     application.appliedclubModerator,
     application.appliedClubDetails,
+    application.appliedClubLocation,
   ];
   clubEnrollmentSheet.appendRow(enrollmentLogRecord);
 }

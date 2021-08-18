@@ -1,7 +1,7 @@
 <script>
   import { fade } from "svelte/transition";
   google.script.run.withSuccessHandler(showAvailableClubs).getClubsFilteredByLevel();
-  let titles = ["Club Name", "Enrolled", "Capacity", "Details", "Moderator"];
+  let titles = ["Club Name", "Enrolled", "Capacity", "Location", "Moderator"];
   let clubs = {};
   function showAvailableClubs(clubList) {
     clubs = clubList;
@@ -35,7 +35,7 @@
             <td class="mx-2 px-2 border border-blue-800">{club.name}</td>
             <td class="px-2 border border-blue-800 text-center">{club.enrolled}</td>
             <td class="px-2 border border-blue-800 text-center">{club.capacity}</td>
-            <td class="mx-2  px-2 border border-blue-800">{club.description}</td>
+            <td class="mx-2  px-2 border border-blue-800">{club.location}</td>
             <td class="mx-2 px-2 border border-blue-800">{club.moderator}</td>
           </tr>
         {/each}

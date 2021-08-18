@@ -3,6 +3,7 @@ function sendApplicationEmail(application) {
   htmlBody.stuName = application.name;
   htmlBody.clubName = application.appliedClubName;
   htmlBody.clubDetails = application.appliedClubDetails;
+  htmlBody.clubLocation = application.appliedClubLocation;
   htmlBody.clubModerator = application.appliedclubModerator;
   htmlBody.message = application.message;
   const emailHtml = htmlBody.evaluate().getContent();

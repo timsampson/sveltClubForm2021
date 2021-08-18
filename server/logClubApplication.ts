@@ -12,6 +12,7 @@ function logClubApplication(application) {
     application.appliedClubName,
     application.appliedclubModerator,
     application.appliedClubDetails,
+    application.appliedClubLocation,
     application.hasCapacity,
     application.canSubmit,
     application.isApproved,

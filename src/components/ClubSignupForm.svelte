@@ -208,21 +208,5 @@
       </svg>
       <span>Submit</span>
     </button>
-    {#if formClosed && $userDetails.formState !== undefined && !$userDetails.formSubmitted}
-      {#if $userDetails.formState === "view"}
-        <br />
-        <span class="text-blue-900 italic"
-          >{`The form status is ${$userDetails.formState} only.`}</span
-        >
-      {:else if $userDetails.formState === "submit" && $userDetails.isInClub}
-        <br />
-        <span class="text-blue-900 italic"
-          >{`The form is only accepting enrollments for students not yet in clubs.`}</span
-        >
-      {:else}
-        <br />
-        <span class="text-blue-900 italic">{`The form status is ${$userDetails.formState}.`}</span>
-      {/if}
-    {/if}
   </form>
 </div>

@@ -1,7 +1,7 @@
 <script>
   google.script.run.withSuccessHandler(showUserClubRecord).getClubRecords();
   google.script.run.withSuccessHandler(showClubValues).getClubApplicationRecords();
-  export let titles = ["Club Name", "Enrolled", "Capacity", "Level", "Details", "Moderator"];
+  export let titles = ["Club Name", "Enrolled", "Capacity", "Level", "Location", "Moderator"];
   export let records = [];
   function showUserClubRecord(allClubValues) {
     records = allClubValues;
@@ -29,7 +29,7 @@
           <td class="min-w-26 px-2 border border-blue-800">{record.enrolled}</td>
           <td class="min-w-26 px-2 border border-blue-800">{record.capacity}</td>
           <td class="min-w-26 px-2 border border-blue-800">{record.level}</td>
-          <td class="min-w-26 px-2 border border-blue-800">{record.description}</td>
+          <td class="min-w-26 px-2 border border-blue-800">{record.location}</td>
           <td class="min-w-26 px-2 border border-blue-800">{record.moderator}</td>
         </tr>
       {/each}

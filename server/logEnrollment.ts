@@ -11,6 +11,7 @@ function logEnrollment(application){
     application.appliedClubName,
     application.appliedclubModerator,
     application.appliedClubDetails,
+    application.appliedClubLocation,
   ];
   let recordId = applicationId(clubEnrollmentSheet);
   logRecord.unshift(recordId);
