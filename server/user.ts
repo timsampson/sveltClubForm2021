@@ -1,5 +1,6 @@
 function testuser(){
   getUserState().then( (value) => Logger.log(value));
+  getClubsFilteredByLevel().then((value) => Logger.log(value));
 }
 async function getUserState() {
   let userState = {

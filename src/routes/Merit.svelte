@@ -1,31 +1,37 @@
 <script>
-  import { studentData } from "../studentData";
+  import Button from "../components/ui/Button.svelte";
+  import {
+    studentData,
+    behaviorCategories,
+    positiveList,
+    informationList,
+    level1List,
+    YCList,
+    OCList,
+    RCList,
+  } from "../db";
   import { onMount } from "svelte";
   import { slide } from "svelte/transition";
   import { quintOut } from "svelte/easing";
-  let merits = ["Information", "Level 1", "Yellow Level", "Orange Level", "Red Level"];
+  let submitted = false;
   let level = "";
   let searchTerm = "";
   let selectedHomeroom;
   let homerooms = [];
   let categories = [];
-  let informationData = ["sleepy", "eating in class", "late", "emotional"];
-  let level1Data = ["off task", "constantly chatting", "tardy"];
-  let YCData = ["shouting", "running", "sleeping"];
-  let OCData = ["fighting", "screaming", "thowing objects"];
-  let RCData = ["smoking", "fireworks", "swearing"];
+  let behaviorList = [];
   function displayCategories() {
     if (level === "Information") {
-      categories = informationData;
+      categories = informationList;
     } else if (level === "Level 1") {
-      categories = level1Data;
+      categories = level1List;
     } else if (level === "Yellow Level") {
-      categories = YCData;
+      categories = YCList;
     } else if (level === "Orange Level") {
-      categories = OCData;
+      categories = OCList;
     } else if (level === "Red Level") {
-      categories = RCData;
-    }
+      categories = RCList;
+    } else categories = positiveList;
   }
   let filteredStudents = [];
 
@@ -40,7 +46,6 @@
   onMount(() => getHomerooms());
 
   $: if (selectedHomeroom) getStudentsByHr();
-  $: console.log(filteredStudents, selectedHomeroom);
 
   const getStudentsByHr = () => {
     searchTerm = "";
@@ -59,8 +64,10 @@
       return studentName.includes(searchTerm.toLowerCase());
     }));
   };
-  $: console.log(searchStudents);
-  function handleSubmit() {}
+  function handleSubmit() {
+    submitted = true;
+    console.log(`level:  ${level}.... behaviorList: ${behaviorList}`);
+  }
 </script>
 
 <div class="m-4">
@@ -91,7 +98,7 @@
     <div class="flex flex-wrap -mx-3 mb-6">
       <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
         <div>
-          {#each merits as merit}
+          {#each behaviorCategories as merit}
             <div class="mb-2">
               <label>
                 <input
@@ -116,13 +123,16 @@
                 class="border-b-2 border-blue-200 pt-2 pb-1"
                 transition:slide|local={{ delay: 250, duration: 300, easing: quintOut }}
               >
-                <input
-                  id={category}
-                  type="checkbox"
-                  class=" text-red-500 border-2 rounded border-red-500 focus:ring-red-500"
-                  name="rejects"
-                />
-                <label for={category} class="ml-2 py-1 text-sm">{category}</label>
+                <label for={category} class="ml-2 py-1 text-sm">
+                  <input
+                    type="checkbox"
+                    class=" text-blue-500 border-2 rounded border-blue-500 focus:ring-blue-500"
+                    bind:group={behaviorList}
+                    name="behaviorList"
+                    value={category}
+                  />
+                  {category}</label
+                >
               </li>
             {/each}
           </ul>
@@ -133,10 +143,8 @@
     </div>
   </form>
 
-  <div class="md:flex md:items-center">
-    <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4  rounded">
-      Button
-    </button>
+  <div class="inline-flex">
+    <Button {submitted} on:click={handleSubmit}>Submit</Button>
   </div>
 </div>
 <div class="ml-8 ">
