@@ -7,16 +7,15 @@
 
   emailLoaded = false;
   onMount(() => {
-    google.script.run.withSuccessHandler(setEmail).getUserEmail();
+    google.script.run.withSuccessHandler(setProfileEmail).getUserEmail();
     getUpdatedUserDetails();
   });
-  function setEmail(email) {
+  function setProfileEmail(email) {
     userEmail = email;
   }
   function getUpdatedUserDetails() {
     google.script.run.withSuccessHandler(updateUserDetails).getUserState();
   }
-
   function updateUserDetails(updatedUserDetails) {
     userDetails.set(updatedUserDetails);
   }
